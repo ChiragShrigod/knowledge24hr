@@ -1,0 +1,127 @@
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { theme } from "../common/theme";
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const links = [
+    { label: "Home",  path: "/",            exact: true  },
+    { label: "GK",    path: "/gk",          exact: false },
+    { label: "Facts", path: "/facts",       exact: false },
+    { label: "Tips",  path: "/tips",        exact: false },
+    { label: "About", path: "/about",       exact: true  },
+  ];
+
+  /* Active check:
+     - exact=true  → must match exactly "/"
+     - exact=false → current path starts with "/gk", "/facts", etc.
+  */
+  const isActive = (link) => {
+    if (link.exact) return location.pathname === link.path;
+    return location.pathname.startsWith(link.path);
+  };
+
+  return (
+    <nav style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+      transition: "all 0.4s ease",
+      background: scrolled ? "rgba(11,15,25,0.92)" : "rgba(11,15,25,0.65)",
+      backdropFilter: "blur(18px)",
+      borderBottom: "1px solid rgba(255,255,255,0.06)",
+      boxShadow: scrolled ? "0 0 40px rgba(79,140,255,0.12)" : "none",
+    }}>
+      <div style={{
+        maxWidth: "1200px", margin: "0 auto",
+        height: "66px", display: "flex",
+        alignItems: "center", justifyContent: "space-between",
+        padding: "0 2rem",
+      }}>
+
+        {/* LOGO */}
+        <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{
+            width: "34px", height: "34px",
+            background: "linear-gradient(135deg, #1565C0 0%, #42A5F5 100%)",
+            borderRadius: "9px",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontWeight: 800, fontSize: "17px", color: "#fff",
+          }}>K</div>
+          <span style={{ fontWeight: 800, fontSize: "17px", color: theme.colors.textPrimary }}>
+            Knowledge<span style={{ color: "#FFD600" }}>Hub</span>
+          </span>
+        </Link>
+
+        {/* NAV LINKS */}
+        <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
+          {links.map((link) => {
+            const active = isActive(link);
+            return (
+              <Link
+                key={link.path}
+                to={link.exact || link.path === "/" ? link.path : (
+                  link.path === "/gk"    ? "/gk/fullForms"   :
+                  link.path === "/facts" ? "/facts/funFacts"  :
+                  link.path === "/tips"  ? "/tips/health"     :
+                  link.path
+                )}
+                style={{
+                  textDecoration: "none",
+                  padding: "7px 14px",
+                  borderRadius: "8px",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  color: active ? theme.colors.primary : theme.colors.textSecondary,
+                  background: active ? "rgba(79,140,255,0.12)" : "transparent",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={e => {
+                  if (!active) {
+                    e.currentTarget.style.color = "#E6EAF2";
+                    e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!active) {
+                    e.currentTarget.style.color = theme.colors.textSecondary;
+                    e.currentTarget.style.background = "transparent";
+                  }
+                }}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+
+          {/* CTA BUTTON */}
+          <Link
+            to="/gk/fullForms"
+            style={{
+              textDecoration: "none",
+              marginLeft: "10px",
+              padding: "9px 22px",
+              borderRadius: "9px",
+              fontWeight: 700,
+              fontSize: "14px",
+              background: theme.gradients.cardYellow,
+              color: "#0B0F19",
+              boxShadow: theme.shadows.glowYellow,
+              transition: "transform 0.2s ease, box-shadow 0.2s ease",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = ""; }}
+          >
+            Start Now →
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
+}

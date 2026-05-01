@@ -1,0 +1,1 @@
+export default function Facts() { return <div>Facts Page</div> }
