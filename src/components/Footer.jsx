@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { theme } from "../common/theme";
 
 const SOCIAL_LINKS = [
   {
@@ -42,9 +43,9 @@ export default function Footer() {
   return (
     <footer style={{
       background: "rgba(8,12,20,0.95)",
-      borderTop: "1px solid rgba(255,255,255,0.06)",
+      borderTop: `1px solid ${theme.colors.border}`,
       padding: "3rem 2rem 1.5rem",
-      fontFamily: "'Syne', 'Plus Jakarta Sans', sans-serif",
+      fontFamily: theme.fonts.legacyHeading,
     }}>
       <div style={{ maxWidth: "1140px", margin: "0 auto" }}>
 
@@ -61,16 +62,16 @@ export default function Footer() {
             <Link to="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
               <div style={{
                 width: "34px", height: "34px",
-                background: "linear-gradient(135deg, #1565C0 0%, #42A5F5 100%)",
+                background: theme.gradients.logoBlue,
                 borderRadius: "9px",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontWeight: 800, fontSize: "17px", color: "#fff",
+                fontWeight: 800, fontSize: "17px", color: theme.colors.white,
               }}>K</div>
-              <span style={{ fontWeight: 800, fontSize: "17px", color: "#E6EAF2" }}>
-                Knowledge<span style={{ color: "#FFD600" }}>Hub</span>
+              <span style={{ fontWeight: 800, fontSize: "17px", color: theme.colors.textPrimary }}>
+                Knowledge<span style={{ color: theme.colors.yellow }}>Hub</span>
               </span>
             </Link>
-            <p style={{ color: "#6B7280", fontSize: "13px", lineHeight: 1.7, maxWidth: "220px" }}>
+            <p style={{ color: theme.colors.textMuted, fontSize: "13px", lineHeight: 1.7, maxWidth: "220px" }}>
               GK, Facts & Life Tips — curated, clean, and actually useful.
             </p>
 
@@ -89,7 +90,7 @@ export default function Footer() {
                     background: "rgba(255,255,255,0.05)",
                     border: "1px solid rgba(255,255,255,0.09)",
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    color: "#9AA4B2",
+                    color: theme.colors.textSecondary,
                     transition: "all 0.22s ease",
                     textDecoration: "none",
                   }}
@@ -101,7 +102,7 @@ export default function Footer() {
                     e.currentTarget.style.boxShadow = `0 8px 24px ${s.hoverColor}30`;
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.color = "#9AA4B2";
+                    e.currentTarget.style.color = theme.colors.textSecondary;
                     e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)";
                     e.currentTarget.style.background = "rgba(255,255,255,0.05)";
                     e.currentTarget.style.transform = "";
@@ -116,7 +117,7 @@ export default function Footer() {
 
           {/* Categories */}
           <div>
-            <h4 style={{ color: "#E6EAF2", fontSize: "13px", fontWeight: 700, marginBottom: "14px", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+            <h4 style={{ color: theme.colors.textPrimary, fontSize: "13px", fontWeight: 700, marginBottom: "14px", letterSpacing: "0.5px", textTransform: "uppercase" }}>
               Categories
             </h4>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -124,9 +125,9 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.route}
-                  style={{ textDecoration: "none", color: "#6B7280", fontSize: "14px", transition: "color 0.2s ease" }}
-                  onMouseEnter={e => e.currentTarget.style.color = "#4F8CFF"}
-                  onMouseLeave={e => e.currentTarget.style.color = "#6B7280"}
+                  style={{ textDecoration: "none", color: theme.colors.textMuted, fontSize: "14px", transition: "color 0.2s ease" }}
+                  onMouseEnter={e => e.currentTarget.style.color = theme.colors.primary}
+                  onMouseLeave={e => e.currentTarget.style.color = theme.colors.textMuted}
                 >
                   {link.label}
                 </Link>
@@ -136,7 +137,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 style={{ color: "#E6EAF2", fontSize: "13px", fontWeight: 700, marginBottom: "14px", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+            <h4 style={{ color: theme.colors.textPrimary, fontSize: "13px", fontWeight: 700, marginBottom: "14px", letterSpacing: "0.5px", textTransform: "uppercase" }}>
               Quick Links
             </h4>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -144,9 +145,9 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.route}
-                  style={{ textDecoration: "none", color: "#6B7280", fontSize: "14px", transition: "color 0.2s ease" }}
-                  onMouseEnter={e => e.currentTarget.style.color = "#4F8CFF"}
-                  onMouseLeave={e => e.currentTarget.style.color = "#6B7280"}
+                  style={{ textDecoration: "none", color: theme.colors.textMuted, fontSize: "14px", transition: "color 0.2s ease" }}
+                  onMouseEnter={e => e.currentTarget.style.color = theme.colors.primary}
+                  onMouseLeave={e => e.currentTarget.style.color = theme.colors.textMuted}
                 >
                   {link.label}
                 </Link>
@@ -156,10 +157,10 @@ export default function Footer() {
 
           {/* Newsletter / CTA */}
           <div>
-            <h4 style={{ color: "#E6EAF2", fontSize: "13px", fontWeight: 700, marginBottom: "14px", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+            <h4 style={{ color: theme.colors.textPrimary, fontSize: "13px", fontWeight: 700, marginBottom: "14px", letterSpacing: "0.5px", textTransform: "uppercase" }}>
               Start Learning
             </h4>
-            <p style={{ color: "#6B7280", fontSize: "13px", lineHeight: 1.65, marginBottom: "14px" }}>
+            <p style={{ color: theme.colors.textMuted, fontSize: "13px", lineHeight: 1.65, marginBottom: "14px" }}>
               Jump into curated GK, science facts, and life tips.
             </p>
             <Link
@@ -169,8 +170,8 @@ export default function Footer() {
                 display: "inline-block",
                 padding: "9px 20px",
                 borderRadius: "9px",
-                background: "linear-gradient(135deg, #FFD600, #F59E0B)",
-                color: "#0B0F19",
+                background: theme.gradients.cardYellow,
+                color: theme.colors.textInverse,
                 fontWeight: 700,
                 fontSize: "13px",
                 transition: "transform 0.2s ease, box-shadow 0.2s ease",
@@ -185,7 +186,7 @@ export default function Footer() {
         </div>
 
         {/* ── DIVIDER ── */}
-        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)", margin: "0 0 1.4rem" }} />
+        <div style={{ height: "1px", background: theme.gradients.divider, margin: "0 0 1.4rem" }} />
 
         {/* ── BOTTOM ROW ── */}
         <div style={{
@@ -195,17 +196,17 @@ export default function Footer() {
           flexWrap: "wrap",
           gap: "10px",
         }}>
-          <span style={{ color: "#3D4450", fontSize: "13px", fontWeight: 600 }}>
-            Knowledge Hub © 2025
+          <span style={{ color: theme.colors.textFaint, fontSize: "13px", fontWeight: 600 }}>
+            knowledge24hr 
           </span>
           <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.label}
                 to={link.route}
-                style={{ textDecoration: "none", color: "#3D4450", fontSize: "12px", transition: "color 0.2s" }}
-                onMouseEnter={e => e.currentTarget.style.color = "#9AA4B2"}
-                onMouseLeave={e => e.currentTarget.style.color = "#3D4450"}
+                style={{ textDecoration: "none", color: theme.colors.textFaint, fontSize: "12px", transition: "color 0.2s" }}
+                onMouseEnter={e => e.currentTarget.style.color = theme.colors.textSecondary}
+                onMouseLeave={e => e.currentTarget.style.color = theme.colors.textFaint}
               >
                 {link.label}
               </Link>

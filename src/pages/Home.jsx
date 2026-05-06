@@ -1,26 +1,27 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { theme } from "../common/theme";
 
 const CATEGORIES = [
   {
     id: "gk", title: "General Knowledge", icon: "🧠", color: "blue", route: "/gk",
     description: "Quizzes, full forms, and extreme facts to sharpen your mind.",
-    tags: ["Full Forms", "MCQ Quiz", "Extremes"], accent: "#4F8CFF",
-    glow: "rgba(79,140,255,0.35)", gradient: "linear-gradient(135deg,#1E3A8A 0%,#2563EB 100%)",
+    tags: ["Full Forms", "MCQ Quiz", "Extremes"], accent: theme.categoryThemes.blue.accent,
+    glow: theme.categoryThemes.blue.glow, gradient: theme.categoryThemes.blue.gradient,
     tagRoutes: { "Full Forms":"/gk/fullForms","MCQ Quiz":"/gk/quiz","Extremes":"/gk/extremes" },
   },
   {
     id: "facts", title: "Amazing Facts", icon: "⚡", color: "yellow", route: "/facts",
     description: "Fun, science, and creepy facts with detailed writeups.",
-    tags: ["Fun Facts","Science","Creepy"], accent: "#FFD600",
-    glow: "rgba(255,214,0,0.35)", gradient: "linear-gradient(135deg,#FACC15 0%,#F59E0B 100%)",
+    tags: ["Fun Facts","Science","Creepy"], accent: theme.categoryThemes.yellow.accent,
+    glow: theme.categoryThemes.yellow.glow, gradient: theme.categoryThemes.yellow.gradient,
     tagRoutes: { "Fun Facts":"/facts/funFacts","Science":"/facts/scienceFacts","Creepy":"/facts/randomFacts" },
   },
   {
     id: "tips", title: "Helpful Tips", icon: "💡", color: "cyan", route: "/tips",
     description: "Practical tips for health, self-improvement, and everyday life.",
-    tags: ["Health","Motivation","Self Growth"], accent: "#22D3EE",
-    glow: "rgba(34,211,238,0.35)", gradient: "linear-gradient(135deg,#0891B2 0%,#22D3EE 100%)",
+    tags: ["Health","Motivation","Self Growth"], accent: theme.categoryThemes.cyan.accent,
+    glow: theme.categoryThemes.cyan.glow, gradient: theme.categoryThemes.cyan.gradient,
     tagRoutes: { "Health":"/tips/health","Motivation":"/tips/motivation","Self Growth":"/tips/selfImprovement" },
   },
 ];
@@ -75,9 +76,8 @@ export default function Home() {
   const def = { "/gk":"/gk/fullForms","/facts":"/facts/funFacts","/tips":"/tips/health" };
 
   return (
-    <div style={{ fontFamily:"'Outfit',sans-serif", overflowX:"hidden", background:"#080C14" }}>
+    <div style={{ fontFamily: theme.fonts.display, overflowX:"hidden", background: theme.colors.appBg }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Nunito:wght@400;500;600;700;800&display=swap');
         @keyframes floatP { 0%,100%{transform:translateY(0) scale(1);opacity:var(--op)} 50%{transform:translateY(-20px) scale(1.08);opacity:calc(var(--op)*1.5)} }
         @keyframes shimmerH { 0%{background-position:-200% center} 100%{background-position:200% center} }
         @keyframes fadeUpH { from{opacity:0;transform:translateY(36px)} to{opacity:1;transform:translateY(0)} }
@@ -103,24 +103,24 @@ export default function Home() {
         <div style={{ position:"absolute",top:"30%",left:"-6%",width:"300px",height:"300px",borderRadius:"50%",background:"radial-gradient(circle,rgba(255,214,0,0.07) 0%,transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
 
         <div style={{ maxWidth:"820px",zIndex:2,position:"relative" }}>
-          <h1 style={{ fontWeight:900,fontSize:"clamp(2.8rem,6.5vw,4.6rem)",color:"#E6EAF2",marginBottom:"1.3rem",letterSpacing:"-2px",lineHeight:1.05,fontFamily:"'Outfit',sans-serif",...anim(0.15) }}>
+          <h1 style={{ fontWeight:900,fontSize:"clamp(2.8rem,6.5vw,4.6rem)",color:theme.colors.textPrimary,marginBottom:"1.3rem",letterSpacing:"-2px",lineHeight:1.05,fontFamily:theme.fonts.display,...anim(0.15) }}>
             Learn Something{" "}
-            <span style={{ background:"linear-gradient(90deg,#4F8CFF 0%,#22D3EE 50%,#4F8CFF 100%)",backgroundSize:"200% auto",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",animation:"shimmerH 3s linear infinite",display:"inline-block" }}>
+            <span style={{ background:theme.gradients.shimmerBlue,backgroundSize:"200% auto",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",animation:"shimmerH 3s linear infinite",display:"inline-block" }}>
               Extraordinary
             </span>
             <br />Every Single Day
           </h1>
 
-          <p style={{ color:"#9AA4B2",fontSize:"clamp(1rem,2vw,1.12rem)",lineHeight:1.75,maxWidth:"560px",margin:"0 auto 2.8rem",fontFamily:"'Nunito',sans-serif",fontWeight:500,...anim(0.35) }}>
+          <p style={{ color:theme.colors.textSecondary,fontSize:"clamp(1rem,2vw,1.12rem)",lineHeight:1.75,maxWidth:"560px",margin:"0 auto 2.8rem",fontFamily:theme.fonts.body,fontWeight:500,...anim(0.35) }}>
             GK, Facts & Life Tips — curated, clean, and actually useful. No fluff. No clickbait. Just sharp knowledge.
           </p>
 
           <div style={{ display:"flex",gap:"14px",justifyContent:"center",flexWrap:"wrap",...anim(0.5) }}>
-            <a href="#categories" style={{ textDecoration:"none",padding:"14px 34px",borderRadius:"14px",fontWeight:700,fontSize:"15px",background:"linear-gradient(135deg,#4F8CFF,#2563EB)",color:"#fff",boxShadow:"0 8px 30px rgba(79,140,255,0.45),0 0 0 1px rgba(79,140,255,0.2)",fontFamily:"'Outfit',sans-serif",transition:"transform 0.2s,box-shadow 0.2s" }}
+            <a href="#categories" style={{ textDecoration:"none",padding:"14px 34px",borderRadius:"14px",fontWeight:700,fontSize:"15px",background:theme.gradients.cardBlue,color:theme.colors.white,boxShadow:theme.shadows.ctaBlue,fontFamily:theme.fonts.display,transition:"transform 0.2s,box-shadow 0.2s" }}
               onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 14px 40px rgba(79,140,255,0.55)"}}
-              onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow="0 8px 30px rgba(79,140,255,0.45),0 0 0 1px rgba(79,140,255,0.2)"}}
+              onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow=theme.shadows.ctaBlue}}
             >Explore Now →</a>
-            <Link to="/facts/funFacts" style={{ textDecoration:"none",padding:"14px 34px",borderRadius:"14px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.12)",color:"#E6EAF2",backdropFilter:"blur(10px)",fontFamily:"'Outfit',sans-serif",transition:"all 0.2s ease" }}
+            <Link to="/facts/funFacts" style={{ textDecoration:"none",padding:"14px 34px",borderRadius:"14px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.12)",color:theme.colors.textPrimary,backdropFilter:"blur(10px)",fontFamily:theme.fonts.display,transition:"all 0.2s ease" }}
               onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.09)";e.currentTarget.style.transform="translateY(-3px)"}}
               onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.05)";e.currentTarget.style.transform=""}}
             >Browse Facts ⚡</Link>
@@ -128,8 +128,8 @@ export default function Home() {
         </div>
 
         <div style={{ position:"absolute",bottom:"36px",left:"50%",transform:"translateX(-50%)",display:"flex",flexDirection:"column",alignItems:"center",gap:"6px",opacity:mounted?0.45:0,transition:"opacity 1s ease 1.2s" }}>
-          <span style={{ fontSize:"10px",color:"#6B7280",letterSpacing:"2.5px",textTransform:"uppercase",fontFamily:"'Nunito',sans-serif" }}>scroll</span>
-          <div style={{ width:"1px",height:"40px",background:"linear-gradient(to bottom,#4F8CFF,transparent)" }} />
+          <span style={{ fontSize:"10px",color:theme.colors.textMuted,letterSpacing:"2.5px",textTransform:"uppercase",fontFamily:theme.fonts.body }}>scroll</span>
+          <div style={{ width:"1px",height:"40px",background:`linear-gradient(to bottom,${theme.colors.primary},transparent)` }} />
         </div>
       </section>
 
@@ -137,15 +137,15 @@ export default function Home() {
       <section id="categories" style={{ padding:"7rem 2rem" }}>
         <div style={{ maxWidth:"1140px",margin:"0 auto" }}>
           <div style={{ textAlign:"center",marginBottom:"4rem" }}>
-            <span style={{ fontWeight:700,fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:"#4F8CFF",display:"block",marginBottom:"14px",fontFamily:"'Nunito',sans-serif" }}>◆ EXPLORE CATEGORIES ◆</span>
-            <h2 style={{ fontWeight:900,fontSize:"clamp(2rem,4vw,3rem)",color:"#E6EAF2",margin:"0 0 14px",letterSpacing:"-1.2px",fontFamily:"'Outfit',sans-serif" }}>Choose your learning path</h2>
-            <p style={{ color:"#9AA4B2",fontSize:"15px",maxWidth:"420px",margin:"0 auto",lineHeight:1.65,fontFamily:"'Nunito',sans-serif" }}>Short, sharp content — no fluff, no filler. Just pure knowledge.</p>
+            <span style={{ fontWeight:700,fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:theme.colors.primary,display:"block",marginBottom:"14px",fontFamily:theme.fonts.body }}>◆ EXPLORE CATEGORIES ◆</span>
+            <h2 style={{ fontWeight:900,fontSize:"clamp(2rem,4vw,3rem)",color:theme.colors.textPrimary,margin:"0 0 14px",letterSpacing:"-1.2px",fontFamily:theme.fonts.display }}>Choose your learning path</h2>
+            <p style={{ color:theme.colors.textSecondary,fontSize:"15px",maxWidth:"420px",margin:"0 auto",lineHeight:1.65,fontFamily:theme.fonts.body }}>Short, sharp content — no fluff, no filler. Just pure knowledge.</p>
           </div>
 
           <div style={{ display:"flex",gap:"28px",flexWrap:"wrap",justifyContent:"center" }}>
             {CATEGORIES.map((cat,i)=>(
               <MagneticCard key={cat.id} onClick={()=>navigate(def[cat.route]||cat.route)}
-                style={{ flex:"1 1 310px",maxWidth:"370px",background:"rgba(18,24,38,0.82)",borderRadius:"22px",padding:"2.2rem",border:"1px solid rgba(255,255,255,0.07)",boxShadow:"0 8px 40px rgba(0,0,0,0.4)",position:"relative",overflow:"hidden",animation:`fadeUpH 0.7s ease ${0.1+i*0.15}s both`,backdropFilter:"blur(20px)" }}>
+                style={{ flex:"1 1 310px",maxWidth:"370px",background:theme.colors.surfaceCard,borderRadius:"22px",padding:"2.2rem",border:"1px solid rgba(255,255,255,0.07)",boxShadow:theme.shadows.card,position:"relative",overflow:"hidden",animation:`fadeUpH 0.7s ease ${0.1+i*0.15}s both`,backdropFilter:"blur(20px)" }}>
                 <div style={{ position:"absolute",inset:0,background:cat.gradient,opacity:0.07,pointerEvents:"none" }} />
                 <div style={{ position:"absolute",top:0,left:"18%",right:"18%",height:"2px",background:`linear-gradient(90deg,transparent,${cat.accent},transparent)`,borderRadius:"999px",opacity:0.75 }} />
                 <div style={{ position:"relative",display:"inline-flex",marginBottom:"1.4rem" }}>
@@ -154,19 +154,19 @@ export default function Home() {
                     <div key={ri} style={{ position:"absolute",inset:0,borderRadius:"16px",border:`1.5px solid ${cat.accent}`,animation:`pRing 2.8s ease-out ${d}s infinite`,pointerEvents:"none" }} />
                   ))}
                 </div>
-                <h3 style={{ fontWeight:800,fontSize:"21px",color:"#E6EAF2",marginBottom:"10px",letterSpacing:"-0.4px",fontFamily:"'Outfit',sans-serif" }}>{cat.title}</h3>
-                <p style={{ color:"#9AA4B2",fontSize:"14px",lineHeight:1.68,marginBottom:"1.4rem",fontFamily:"'Nunito',sans-serif" }}>{cat.description}</p>
+                <h3 style={{ fontWeight:800,fontSize:"21px",color:theme.colors.textPrimary,marginBottom:"10px",letterSpacing:"-0.4px",fontFamily:theme.fonts.display }}>{cat.title}</h3>
+                <p style={{ color:theme.colors.textSecondary,fontSize:"14px",lineHeight:1.68,marginBottom:"1.4rem",fontFamily:theme.fonts.body }}>{cat.description}</p>
                 <div style={{ display:"flex",flexWrap:"wrap",gap:"7px",marginBottom:"1.7rem" }}>
                   {cat.tags.map(tag=>(
                     <span key={tag} onClick={e=>{e.stopPropagation();navigate(cat.tagRoutes[tag])}}
-                      style={{ background:`${cat.accent}15`,color:cat.accent,fontSize:"12px",fontWeight:700,padding:"5px 13px",borderRadius:"999px",border:`1px solid ${cat.accent}30`,cursor:"pointer",transition:"all 0.2s",fontFamily:"'Nunito',sans-serif" }}
+                      style={{ background:`${cat.accent}15`,color:cat.accent,fontSize:"12px",fontWeight:700,padding:"5px 13px",borderRadius:"999px",border:`1px solid ${cat.accent}30`,cursor:"pointer",transition:"all 0.2s",fontFamily:theme.fonts.body }}
                       onMouseEnter={e=>{e.currentTarget.style.background=`${cat.accent}28`;e.currentTarget.style.transform="translateY(-2px)"}}
                       onMouseLeave={e=>{e.currentTarget.style.background=`${cat.accent}15`;e.currentTarget.style.transform=""}}
                     >{tag}</span>
                   ))}
                 </div>
                 <button onClick={e=>{e.stopPropagation();navigate(def[cat.route]||cat.route)}}
-                  style={{ background:cat.gradient,color:cat.color==="yellow"?"#0B0F19":"#fff",border:"none",cursor:"pointer",padding:"11px 22px",borderRadius:"11px",fontWeight:700,fontSize:"14px",display:"inline-flex",alignItems:"center",gap:"7px",boxShadow:`0 6px 24px ${cat.glow}`,transition:"all 0.25s ease",fontFamily:"'Outfit',sans-serif" }}
+                  style={{ background:cat.gradient,color:cat.color==="yellow"?theme.colors.textInverse:theme.colors.white,border:"none",cursor:"pointer",padding:"11px 22px",borderRadius:"11px",fontWeight:700,fontSize:"14px",display:"inline-flex",alignItems:"center",gap:"7px",boxShadow:`0 6px 24px ${cat.glow}`,transition:"all 0.25s ease",fontFamily:theme.fonts.display }}
                   onMouseEnter={e=>{e.currentTarget.style.transform="translateX(5px)";e.currentTarget.style.boxShadow=`0 10px 32px ${cat.glow}`}}
                   onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow=`0 6px 24px ${cat.glow}`}}
                 >Start Now <span style={{fontSize:"16px"}}>→</span></button>
@@ -179,17 +179,17 @@ export default function Home() {
       {/* ── BOTTOM CTA ── */}
       <section style={{ padding:"4rem 2rem 8rem" }}>
         <div style={{ maxWidth:"700px",margin:"0 auto",textAlign:"center" }}>
-          <div style={{ background:"rgba(18,24,38,0.82)",borderRadius:"28px",padding:"3.5rem 2rem",border:"1px solid rgba(79,140,255,0.18)",boxShadow:"0 0 80px rgba(79,140,255,0.10)",position:"relative",overflow:"hidden" }}>
+          <div style={{ background:theme.colors.surfaceCard,borderRadius:"28px",padding:"3.5rem 2rem",border:"1px solid rgba(79,140,255,0.18)",boxShadow:"0 0 80px rgba(79,140,255,0.10)",position:"relative",overflow:"hidden" }}>
             <div style={{ position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(79,140,255,0.11) 0%,transparent 60%)",pointerEvents:"none" }} />
             <div style={{ fontSize:"40px",marginBottom:"1rem" }}>🚀</div>
-            <h2 style={{ fontWeight:900,fontSize:"clamp(1.5rem,3vw,2.2rem)",color:"#E6EAF2",marginBottom:"0.8rem",letterSpacing:"-0.6px",fontFamily:"'Outfit',sans-serif" }}>Ready to get smarter?</h2>
-            <p style={{ color:"#9AA4B2",fontSize:"15px",marginBottom:"2rem",lineHeight:1.65,fontFamily:"'Nunito',sans-serif" }}>Dive into hundreds of curated facts, GK questions, and practical life tips.</p>
+            <h2 style={{ fontWeight:900,fontSize:"clamp(1.5rem,3vw,2.2rem)",color:theme.colors.textPrimary,marginBottom:"0.8rem",letterSpacing:"-0.6px",fontFamily:theme.fonts.display }}>Ready to get smarter?</h2>
+            <p style={{ color:theme.colors.textSecondary,fontSize:"15px",marginBottom:"2rem",lineHeight:1.65,fontFamily:theme.fonts.body }}>Dive into hundreds of curated facts, GK questions, and practical life tips.</p>
             <div style={{ display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap" }}>
-              <Link to="/gk/fullForms" style={{ textDecoration:"none",padding:"13px 28px",borderRadius:"12px",fontWeight:700,fontSize:"15px",background:"linear-gradient(135deg,#FFD600,#F59E0B)",color:"#0B0F19",boxShadow:"0 8px 28px rgba(255,214,0,0.35)",transition:"transform 0.2s,box-shadow 0.2s",fontFamily:"'Outfit',sans-serif" }}
+              <Link to="/gk/fullForms" style={{ textDecoration:"none",padding:"13px 28px",borderRadius:"12px",fontWeight:700,fontSize:"15px",background:theme.gradients.cardYellow,color:theme.colors.textInverse,boxShadow:theme.shadows.ctaYellow,transition:"transform 0.2s,box-shadow 0.2s",fontFamily:theme.fonts.display }}
                 onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 36px rgba(255,214,0,0.45)"}}
-                onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow="0 8px 28px rgba(255,214,0,0.35)"}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow=theme.shadows.ctaYellow}}
               >Start with GK →</Link>
-              <Link to="/facts/funFacts" style={{ textDecoration:"none",padding:"13px 28px",borderRadius:"12px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.12)",color:"#E6EAF2",transition:"all 0.2s",fontFamily:"'Outfit',sans-serif" }}
+              <Link to="/facts/funFacts" style={{ textDecoration:"none",padding:"13px 28px",borderRadius:"12px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.12)",color:theme.colors.textPrimary,transition:"all 0.2s",fontFamily:theme.fonts.display }}
                 onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.10)";e.currentTarget.style.transform="translateY(-3px)"}}
                 onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.06)";e.currentTarget.style.transform=""}}
               >Explore Facts ⚡</Link>

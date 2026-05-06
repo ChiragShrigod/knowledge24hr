@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { fetchPostBySlug } from "../services/bloggerApi"
+import { theme } from "../common/theme"
 
 export default function Content() {
   const { slug }       = useParams()
@@ -26,24 +27,24 @@ export default function Content() {
   }, [slug])
 
   if (loading) return (
-    <div style={{ minHeight:"60vh", display:"flex", alignItems:"center", justifyContent:"center", background:"#080C14" }}>
-      <p style={{ color:"#9AA4B2", fontFamily:"'Nunito',sans-serif", fontSize:"16px" }}>Loading post...</p>
+    <div style={{ minHeight:"60vh", display:"flex", alignItems:"center", justifyContent:"center", background:theme.colors.appBg }}>
+      <p style={{ color:theme.colors.textSecondary, fontFamily:theme.fonts.body, fontSize:"16px" }}>Loading post...</p>
     </div>
   )
 
   if (error) return (
-    <div style={{ minHeight:"60vh", display:"flex", alignItems:"center", justifyContent:"center", background:"#080C14" }}>
-      <p style={{ color:"#f87171", fontFamily:"'Nunito',sans-serif", fontSize:"16px" }}>{error}</p>
+    <div style={{ minHeight:"60vh", display:"flex", alignItems:"center", justifyContent:"center", background:theme.colors.appBg }}>
+      <p style={{ color:theme.colors.redSoft, fontFamily:theme.fonts.body, fontSize:"16px" }}>{error}</p>
     </div>
   )
 
   return (
-    <div style={{ background:"#080C14", minHeight:"100vh", padding:"120px 2rem 80px", fontFamily:"'Outfit',sans-serif" }}>
+    <div style={{ background:theme.colors.appBg, minHeight:"100vh", padding:theme.layout.pagePadding, fontFamily:theme.fonts.display }}>
       <div style={{ maxWidth:"820px", margin:"0 auto" }}>
 
         {/* Back button */}
         <button onClick={() => navigate(-1)}
-          style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.12)", color:"#9AA4B2", padding:"8px 18px", borderRadius:"10px", cursor:"pointer", fontSize:"14px", marginBottom:"2rem", fontFamily:"'Nunito',sans-serif" }}>
+          style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.12)", color:theme.colors.textSecondary, padding:"8px 18px", borderRadius:"10px", cursor:"pointer", fontSize:"14px", marginBottom:"2rem", fontFamily:theme.fonts.body }}>
           ← Back
         </button>
 
@@ -51,7 +52,7 @@ export default function Content() {
         {post.labels.length > 0 && (
           <div style={{ display:"flex", gap:"8px", flexWrap:"wrap", marginBottom:"1.2rem" }}>
             {post.labels.map(label => (
-              <span key={label} style={{ background:"rgba(79,140,255,0.15)", color:"#4F8CFF", fontSize:"12px", fontWeight:700, padding:"4px 12px", borderRadius:"999px", border:"1px solid rgba(79,140,255,0.3)", textTransform:"uppercase", fontFamily:"'Nunito',sans-serif" }}>
+              <span key={label} style={{ background:"rgba(79,140,255,0.15)", color:theme.colors.primary, fontSize:"12px", fontWeight:700, padding:"4px 12px", borderRadius:"999px", border:"1px solid rgba(79,140,255,0.3)", textTransform:"uppercase", fontFamily:theme.fonts.body }}>
                 {label}
               </span>
             ))}
@@ -59,12 +60,12 @@ export default function Content() {
         )}
 
         {/* Title */}
-        <h1 style={{ color:"#E6EAF2", fontSize:"clamp(1.8rem,4vw,2.8rem)", fontWeight:900, lineHeight:1.15, letterSpacing:"-1px", marginBottom:"1rem" }}>
+        <h1 style={{ color:theme.colors.textPrimary, fontSize:"clamp(1.8rem,4vw,2.8rem)", fontWeight:900, lineHeight:1.15, letterSpacing:"-1px", marginBottom:"1rem" }}>
           {post.title}
         </h1>
 
         {/* Date */}
-        <p style={{ color:"#6B7280", fontSize:"14px", marginBottom:"2rem", fontFamily:"'Nunito',sans-serif" }}>
+        <p style={{ color:theme.colors.textMuted, fontSize:"14px", marginBottom:"2rem", fontFamily:theme.fonts.body }}>
           {new Date(post.published).toLocaleDateString("en-IN", { day:"numeric", month:"long", year:"numeric" })}
         </p>
 
@@ -76,7 +77,7 @@ export default function Content() {
 
         {/* Content */}
         <div
-          style={{ color:"#C8CDD6", fontSize:"17px", lineHeight:1.85, fontFamily:"'Nunito',sans-serif" }}
+          style={{ color:theme.colors.textBody, fontSize:"17px", lineHeight:1.85, fontFamily:theme.fonts.body }}
           dangerouslySetInnerHTML={{ __html: post.rawContent }}
         />
 

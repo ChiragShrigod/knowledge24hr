@@ -1,10 +1,12 @@
 // src/pages/AboutUs.jsx
+import { theme } from "../common/theme"
+
 export default function AboutUs() {
   return (
-    <div style={{ background:"#080C14", minHeight:"100vh", padding:"120px 2rem 80px", fontFamily:"'Nunito',sans-serif", color:"#C8CDD6" }}>
+    <div style={{ background:theme.colors.appBg, minHeight:"100vh", padding:theme.layout.pagePadding, fontFamily:theme.fonts.body, color:theme.colors.textBody }}>
       <div style={{ maxWidth:"820px", margin:"0 auto", textAlign:"center" }}>
         <div style={{ fontSize:"48px", marginBottom:"1rem" }}>🧠</div>
-        <h1 style={{ color:"#E6EAF2", fontWeight:900, fontSize:"2.5rem", marginBottom:"1rem" }}>About Knowledge24hr</h1>
+        <h1 style={{ color:theme.colors.textPrimary, fontWeight:900, fontSize:"2.5rem", marginBottom:"1rem" }}>About Knowledge24hr</h1>
         <p style={{ fontSize:"17px", lineHeight:1.85, maxWidth:"600px", margin:"0 auto 2rem" }}>
           Knowledge24hr is your daily destination for General Knowledge, Amazing Facts, and Practical Life Tips. We believe learning should be fun, quick, and accessible to everyone.
         </p>

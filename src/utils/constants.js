@@ -4,7 +4,7 @@ export const SITE_NAME = "Knowledge24hr"
 
 // ─── Blogger API ───────────────────────────────────────────
 export const BLOGGER_FEED_URL =
-  "https://k24hr.blogspot.com/feeds/posts/default?alt=json&cors=true"
+  "https://k24hr.blogspot.com/feeds/posts/default?alt=json"
 
 export const BLOGGER_LABELS = {
   gk:               "gk",
@@ -19,7 +19,6 @@ export const BLOGGER_LABELS = {
   quiz:             "quiz",
 }
 
-export const MAX_POSTS = 20   // posts per fetch
 // ───────────────────────────────────────────────────────────
 
 export const CATEGORIES = [

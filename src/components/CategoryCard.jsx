@@ -1,10 +1,11 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { theme } from "../common/theme";
 
 const COLOR_MAP = {
-  blue:   { accent: "#4F8CFF", glow: "rgba(79,140,255,0.35)",  gradient: "linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%)", textColor: "#fff" },
-  yellow: { accent: "#FFD600", glow: "rgba(255,214,0,0.35)",   gradient: "linear-gradient(135deg, #FACC15 0%, #F59E0B 100%)", textColor: "#0B0F19" },
-  cyan:   { accent: "#22D3EE", glow: "rgba(34,211,238,0.35)",  gradient: "linear-gradient(135deg, #0891B2 0%, #22D3EE 100%)", textColor: "#fff" },
+  blue: theme.categoryThemes.blue,
+  yellow: theme.categoryThemes.yellow,
+  cyan: theme.categoryThemes.cyan,
 };
 
 const TAG_ROUTES = {
@@ -66,18 +67,18 @@ export default function CategoryCard({ id, title, description, icon, color, rout
         onMouseLeave={handleMouseLeave}
         onClick={() => navigate(DEFAULT_ROUTES[route] || route)}
         style={{
-          background: "rgba(18,24,38,0.85)",
+          background: theme.colors.surfaceCardStrong,
           borderRadius: "22px",
           padding: "2.2rem",
           cursor: "pointer",
           position: "relative",
           overflow: "hidden",
           border: "1px solid rgba(255,255,255,0.07)",
-          boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
+          boxShadow: theme.shadows.card,
           transition: "transform 0.28s cubic-bezier(0.23,1,0.32,1), box-shadow 0.28s ease",
           willChange: "transform",
           backdropFilter: "blur(20px)",
-          fontFamily: "'Syne', 'Plus Jakarta Sans', sans-serif",
+          fontFamily: theme.fonts.legacyHeading,
         }}
       >
         {/* Gradient bg wash */}
@@ -134,7 +135,7 @@ export default function CategoryCard({ id, title, description, icon, color, rout
         <h3 style={{
           fontWeight: 800,
           fontSize: "21px",
-          color: "#E6EAF2",
+          color: theme.colors.textPrimary,
           marginBottom: "10px",
           letterSpacing: "-0.3px",
           lineHeight: 1.2,
@@ -144,7 +145,7 @@ export default function CategoryCard({ id, title, description, icon, color, rout
 
         {/* ── Description ── */}
         <p style={{
-          color: "#9AA4B2",
+          color: theme.colors.textSecondary,
           fontSize: "14px",
           lineHeight: 1.68,
           marginBottom: "1.5rem",
@@ -197,7 +198,7 @@ export default function CategoryCard({ id, title, description, icon, color, rout
             gap: "7px",
             boxShadow: `0 6px 24px ${glow}`,
             transition: "transform 0.25s ease, box-shadow 0.25s ease",
-            fontFamily: "'Syne', sans-serif",
+            fontFamily: theme.fonts.legacyHeading,
             letterSpacing: "0.2px",
           }}
           onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 10px 32px ${glow}`; }}
