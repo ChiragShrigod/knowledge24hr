@@ -30,26 +30,41 @@ function parsePost(entry) {
   return { id, slug, title, published, labels, excerpt, rawContent, thumbnail, link }
 }
 
-function withProxy(url) {
+function proxyUrl(bloggerUrl) {
   if (import.meta.env.DEV) {
-    return `https://corsproxy.io/?${encodeURIComponent(url)}`
+    // localhost — use corsproxy.io
+    return `https://corsproxy.io/?${encodeURIComponent(bloggerUrl)}`
   }
-  return url
+  // production — use allorigins
+  return `https://api.allorigins.win/get?url=${encodeURIComponent(bloggerUrl)}`
+}
+
+async function fetchJson(bloggerUrl) {
+  const url = proxyUrl(bloggerUrl)
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`Blogger API error: ${res.status}`)
+  if (import.meta.env.DEV) {
+    return await res.json()
+  } else {
+    // allorigins wraps the response: { contents: "json string..." }
+    const wrapper = await res.json()
+    return JSON.parse(wrapper.contents)
+  }
 }
 
 async function fetchAllPages(baseUrl) {
   let allEntries = []
   let startIndex = 1
+
   while (true) {
-    const url = `${baseUrl}&max-results=${PAGE_SIZE}&start-index=${startIndex}`
-    const res = await fetch(withProxy(url))
-    if (!res.ok) throw new Error(`Blogger API error: ${res.status}`)
-    const data = await res.json()
+    const bloggerUrl = `${baseUrl}&max-results=${PAGE_SIZE}&start-index=${startIndex}`
+    const data = await fetchJson(bloggerUrl)
     const entries = data.feed.entry || []
     allEntries = [...allEntries, ...entries]
     if (entries.length < PAGE_SIZE) break
     startIndex += PAGE_SIZE
   }
+
   return allEntries
 }
 
