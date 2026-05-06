@@ -13,7 +13,18 @@ function extractThumbnail(entry) {
 }
 
 function stripHtml(html = "") {
-  return html.replace(/<[^>]*>/g, "").trim()
+  // First remove all HTML tags
+  const withoutTags = html.replace(/<[^>]*>/g, " ")
+  // Then decode HTML entities like &nbsp; &amp; &lt; etc
+  const decoded = withoutTags
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+  // Clean up extra spaces
+  return decoded.replace(/\s+/g, " ").trim()
 }
 
 function parsePost(entry) {
