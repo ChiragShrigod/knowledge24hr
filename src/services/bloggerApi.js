@@ -1,8 +1,7 @@
 // src/services/bloggerApi.js
 
-import { BLOGGER_FEED_URL } from "../utils/constants"
-
 const PAGE_SIZE = 50
+const BLOG_URL = "https://k24hr.blogspot.com"
 
 function extractThumbnail(entry) {
   if (entry["media$thumbnail"]) {
@@ -30,26 +29,38 @@ function parsePost(entry) {
   return { id, slug, title, published, labels, excerpt, rawContent, thumbnail, link }
 }
 
-function proxyUrl(bloggerUrl) {
-  if (import.meta.env.DEV) {
-    // localhost — use corsproxy.io
-    return `https://corsproxy.io/?${encodeURIComponent(bloggerUrl)}`
-  }
-  // production — use allorigins
-  return `https://api.allorigins.win/get?url=${encodeURIComponent(bloggerUrl)}`
-}
+// JSONP — works on localhost AND production, zero CORS issues
+function fetchJsonp(bloggerUrl) {
+  return new Promise((resolve, reject) => {
+    const callbackName = "bloggerCb_" + Math.random().toString(36).slice(2)
+    const url = `${bloggerUrl}&alt=json-in-script&callback=${callbackName}`
 
-async function fetchJson(bloggerUrl) {
-  const url = proxyUrl(bloggerUrl)
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`Blogger API error: ${res.status}`)
-  if (import.meta.env.DEV) {
-    return await res.json()
-  } else {
-    // allorigins wraps the response: { contents: "json string..." }
-    const wrapper = await res.json()
-    return JSON.parse(wrapper.contents)
-  }
+    const script = document.createElement("script")
+    script.src = url
+
+    const timer = setTimeout(() => {
+      cleanup()
+      reject(new Error("Blogger request timed out"))
+    }, 10000)
+
+    window[callbackName] = (data) => {
+      cleanup()
+      resolve(data)
+    }
+
+    function cleanup() {
+      clearTimeout(timer)
+      delete window[callbackName]
+      if (script.parentNode) script.parentNode.removeChild(script)
+    }
+
+    script.onerror = () => {
+      cleanup()
+      reject(new Error("Failed to fetch from Blogger"))
+    }
+
+    document.head.appendChild(script)
+  })
 }
 
 async function fetchAllPages(baseUrl) {
@@ -58,7 +69,7 @@ async function fetchAllPages(baseUrl) {
 
   while (true) {
     const bloggerUrl = `${baseUrl}&max-results=${PAGE_SIZE}&start-index=${startIndex}`
-    const data = await fetchJson(bloggerUrl)
+    const data = await fetchJsonp(bloggerUrl)
     const entries = data.feed.entry || []
     allEntries = [...allEntries, ...entries]
     if (entries.length < PAGE_SIZE) break
@@ -69,12 +80,13 @@ async function fetchAllPages(baseUrl) {
 }
 
 export async function fetchAllPosts() {
-  const entries = await fetchAllPages(BLOGGER_FEED_URL)
+  const base = `${BLOG_URL}/feeds/posts/default?`
+  const entries = await fetchAllPages(base)
   return entries.map(parsePost)
 }
 
 export async function fetchPostsByLabel(label) {
-  const base = `https://k24hr.blogspot.com/feeds/posts/default/-/${encodeURIComponent(label)}?alt=json`
+  const base = `${BLOG_URL}/feeds/posts/default/-/${encodeURIComponent(label)}?`
   const entries = await fetchAllPages(base)
   return entries.map(parsePost)
 }
