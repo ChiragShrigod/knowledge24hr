@@ -94,6 +94,15 @@ function fmtDate(iso) {
 
 const FALLBACK_IMG = "https://placehold.co/600x300/1a2235/4F8CFF?text=Knowledge24hr";
 
+/* ── 2-line clamp style (reused in grid + table) ── */
+const excerptClampStyle = {
+  display: "-webkit-box",
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: "vertical",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+};
+
 export default function SubCategory() {
   const { category, sub } = useParams();
   const navigate           = useNavigate();
@@ -111,15 +120,17 @@ export default function SubCategory() {
   /* ── Fetch from Blogger ── */
   const { posts, loading, error } = useBloggerPosts(bloggerLabel);
 
-  useEffect(() => {
-    setSearch("");
-    setSelectedItem(null);
-    setCurrentPage(1);
-  }, [cat, sub]);
+useEffect(() => {
+  setSearch("");
+  setSelectedItem(null);
+  setCurrentPage(1);
+}, [cat, sub]);
 
-  useEffect(() => { setCurrentPage(1); }, [search]);
+useEffect(() => { 
+  setCurrentPage(1); 
+}, [search]);
 
-  const tabs   = TAB_CONFIG[cat] || [];
+const tabs = TAB_CONFIG[cat] || [];
   const colors = CAT_ACCENT[cat] || CAT_ACCENT.gk;
 
   /* ── Filter by search ── */
@@ -141,6 +152,11 @@ export default function SubCategory() {
     cat === "facts" ? "Amazing Facts"     :
     cat === "tips"  ? "Helpful Tips"      : category;
 
+  /* ── Tab switching: replace:true is correct here.
+       It replaces the current history entry so pressing Back from
+       /gk/quiz doesn't cycle through /gk/fullForms → /gk/extremes.
+       The category redirect in AppRoutes no longer uses replace, so
+       the home entry stays safely behind in the stack. ── */
   const goTab = useCallback((route) => navigate(route, { replace: true }), [navigate]);
 
   /* ── Pagination ── */
@@ -314,9 +330,10 @@ export default function SubCategory() {
                   <Highlight text={post.title} query={search} />
                 </h2>
 
+                {/* ── FIXED: CSS 2-line clamp (no JS slice) ── */}
                 {post.excerpt && (
-                  <p style={{ color: theme.colors.textSecondary, fontSize: "14px", lineHeight: 1.65, marginTop: "4px", fontFamily: theme.fonts.body }}>
-                    <Highlight text={post.excerpt.slice(0, 120) + (post.excerpt.length > 120 ? "…" : "")} query={search} />
+                  <p style={{ color: theme.colors.textSecondary, fontSize: "14px", lineHeight: 1.65, marginTop: "4px", fontFamily: theme.fonts.body, ...excerptClampStyle }}>
+                    <Highlight text={post.excerpt} query={search} />
                   </p>
                 )}
 
@@ -363,8 +380,9 @@ export default function SubCategory() {
                       )}
                     </td>
                     <td style={{ padding: "14px 16px", maxWidth: "320px" }}>
-                      <span style={{ color: theme.colors.textMuted, fontSize: "13px", lineHeight: 1.5, fontFamily: theme.fonts.body }}>
-                        <Highlight text={(post.excerpt || "").slice(0, 90) + ((post.excerpt || "").length > 90 ? "…" : "")} query={search} />
+                      {/* ── FIXED: CSS 2-line clamp in table preview too ── */}
+                      <span style={{ color: theme.colors.textMuted, fontSize: "13px", lineHeight: 1.5, fontFamily: theme.fonts.body, ...excerptClampStyle }}>
+                        <Highlight text={post.excerpt || ""} query={search} />
                       </span>
                     </td>
                     <td style={{ padding: "14px 16px", whiteSpace: "nowrap" }}>
@@ -433,7 +451,7 @@ export default function SubCategory() {
 
               <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "16px 0" }} />
 
-              {/* Render post HTML content */}
+              {/* Full post HTML content — no clamp in modal */}
               <div
                 style={{ color: theme.colors.textSecondary, lineHeight: 1.75, fontSize: "15px", fontFamily: theme.fonts.body }}
                 dangerouslySetInnerHTML={{ __html: selectedItem.rawContent || selectedItem.excerpt || "" }}

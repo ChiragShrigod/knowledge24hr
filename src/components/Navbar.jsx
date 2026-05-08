@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { theme } from "../common/theme";
 
 export default function Navbar() {
@@ -13,20 +13,24 @@ export default function Navbar() {
   }, []);
 
   const links = [
-    { label: "Home",  path: "/",            exact: true  },
-    { label: "GK",    path: "/gk",          exact: false },
-    { label: "Facts", path: "/facts",       exact: false },
-    { label: "Tips",  path: "/tips",        exact: false },
-    { label: "About", path: "/about",       exact: true  },
+    { label: "Home",  path: "/",      exact: true  },
+    { label: "GK",    path: "/gk",    exact: false },
+    { label: "Facts", path: "/facts", exact: false },
+    { label: "Tips",  path: "/tips",  exact: false },
+    { label: "About", path: "/about", exact: true  },
   ];
 
-  /* Active check:
-     - exact=true  → must match exactly "/"
-     - exact=false → current path starts with "/gk", "/facts", etc.
-  */
   const isActive = (link) => {
     if (link.exact) return location.pathname === link.path;
     return location.pathname.startsWith(link.path);
+  };
+
+  const getTo = (link) => {
+    if (link.exact || link.path === "/") return link.path;
+    if (link.path === "/gk")    return "/gk/fullForms";
+    if (link.path === "/facts") return "/facts/funFacts";
+    if (link.path === "/tips")  return "/tips/health";
+    return link.path;
   };
 
   return (
@@ -55,7 +59,7 @@ export default function Navbar() {
             fontWeight: 800, fontSize: "17px", color: "#fff",
           }}>K</div>
           <span style={{ fontWeight: 800, fontSize: "17px", color: theme.colors.textPrimary }}>
-            Knowledge<span style={{ color: "#FFD600" }}>Hub</span>
+            Knowledge<span style={{ color: "#FFD600" }}>24hr</span>
           </span>
         </Link>
 
@@ -65,13 +69,12 @@ export default function Navbar() {
             const active = isActive(link);
             return (
               <Link
-                key={link.path}
-                to={link.exact || link.path === "/" ? link.path : (
-                  link.path === "/gk"    ? "/gk/fullForms"   :
-                  link.path === "/facts" ? "/facts/funFacts"  :
-                  link.path === "/tips"  ? "/tips/health"     :
-                  link.path
-                )}
+               key={link.path}
+                to={getTo(link)}
+                replace={
+                  location.pathname !== "/" && 
+                  location.pathname !== link.path
+                }
                 style={{
                   textDecoration: "none",
                   padding: "7px 14px",
@@ -100,7 +103,7 @@ export default function Navbar() {
             );
           })}
 
-          {/* CTA BUTTON */}
+          {/* CTA */}
           <Link
             to="/gk/fullForms"
             style={{

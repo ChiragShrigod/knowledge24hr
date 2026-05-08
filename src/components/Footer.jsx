@@ -49,7 +49,7 @@ export default function Footer() {
     }}>
       <div style={{ maxWidth: "1140px", margin: "0 auto" }}>
 
-        {/* ── TOP ROW ── */}
+        {/* TOP ROW */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
@@ -68,7 +68,7 @@ export default function Footer() {
                 fontWeight: 800, fontSize: "17px", color: theme.colors.white,
               }}>K</div>
               <span style={{ fontWeight: 800, fontSize: "17px", color: theme.colors.textPrimary }}>
-                Knowledge<span style={{ color: theme.colors.yellow }}>Hub</span>
+                Knowledge<span style={{ color: theme.colors.yellow }}>24hr</span>
               </span>
             </Link>
             <p style={{ color: theme.colors.textMuted, fontSize: "13px", lineHeight: 1.7, maxWidth: "220px" }}>
@@ -122,15 +122,11 @@ export default function Footer() {
             </h4>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {CATEGORY_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.route}
+                <Link key={link.label} to={link.route}
                   style={{ textDecoration: "none", color: theme.colors.textMuted, fontSize: "14px", transition: "color 0.2s ease" }}
                   onMouseEnter={e => e.currentTarget.style.color = theme.colors.primary}
                   onMouseLeave={e => e.currentTarget.style.color = theme.colors.textMuted}
-                >
-                  {link.label}
-                </Link>
+                >{link.label}</Link>
               ))}
             </div>
           </div>
@@ -142,20 +138,16 @@ export default function Footer() {
             </h4>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.route}
+                <Link key={link.label} to={link.route}
                   style={{ textDecoration: "none", color: theme.colors.textMuted, fontSize: "14px", transition: "color 0.2s ease" }}
                   onMouseEnter={e => e.currentTarget.style.color = theme.colors.primary}
                   onMouseLeave={e => e.currentTarget.style.color = theme.colors.textMuted}
-                >
-                  {link.label}
-                </Link>
+                >{link.label}</Link>
               ))}
             </div>
           </div>
 
-          {/* Newsletter / CTA */}
+          {/* CTA */}
           <div>
             <h4 style={{ color: theme.colors.textPrimary, fontSize: "13px", fontWeight: 700, marginBottom: "14px", letterSpacing: "0.5px", textTransform: "uppercase" }}>
               Start Learning
@@ -163,53 +155,40 @@ export default function Footer() {
             <p style={{ color: theme.colors.textMuted, fontSize: "13px", lineHeight: 1.65, marginBottom: "14px" }}>
               Jump into curated GK, science facts, and life tips.
             </p>
-            <Link
-              to="/gk/fullForms"
+            <Link to="/gk/fullForms"
               style={{
-                textDecoration: "none",
-                display: "inline-block",
-                padding: "9px 20px",
-                borderRadius: "9px",
+                textDecoration: "none", display: "inline-block",
+                padding: "9px 20px", borderRadius: "9px",
                 background: theme.gradients.cardYellow,
                 color: theme.colors.textInverse,
-                fontWeight: 700,
-                fontSize: "13px",
+                fontWeight: 700, fontSize: "13px",
                 transition: "transform 0.2s ease, box-shadow 0.2s ease",
                 boxShadow: "0 6px 20px rgba(255,214,0,0.3)",
               }}
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 10px 28px rgba(255,214,0,0.4)"; }}
               onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 6px 20px rgba(255,214,0,0.3)"; }}
-            >
-              Explore Now →
-            </Link>
+            >Explore Now →</Link>
           </div>
         </div>
 
-        {/* ── DIVIDER ── */}
+        {/* DIVIDER */}
         <div style={{ height: "1px", background: theme.gradients.divider, margin: "0 0 1.4rem" }} />
 
-        {/* ── BOTTOM ROW ── */}
+        {/* BOTTOM ROW */}
         <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "10px",
+          display: "flex", alignItems: "center",
+          justifyContent: "space-between", flexWrap: "wrap", gap: "10px",
         }}>
           <span style={{ color: theme.colors.textFaint, fontSize: "13px", fontWeight: 600 }}>
-            knowledge24hr 
+            © {new Date().getFullYear()} Knowledge24hr. All rights reserved.
           </span>
           <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
             {NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                to={link.route}
+              <Link key={link.label} to={link.route}
                 style={{ textDecoration: "none", color: theme.colors.textFaint, fontSize: "12px", transition: "color 0.2s" }}
                 onMouseEnter={e => e.currentTarget.style.color = theme.colors.textSecondary}
                 onMouseLeave={e => e.currentTarget.style.color = theme.colors.textFaint}
-              >
-                {link.label}
-              </Link>
+              >{link.label}</Link>
             ))}
           </div>
         </div>

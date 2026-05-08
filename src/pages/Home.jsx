@@ -1,5 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  Camera,
+  Globe,
+  ExternalLink
+} from "lucide-react";
 import { theme } from "../common/theme";
 
 const CATEGORIES = [
@@ -74,6 +79,36 @@ export default function Home() {
   });
 
   const def = { "/gk":"/gk/fullForms","/facts":"/facts/funFacts","/tips":"/tips/health" };
+const socials = [
+  {
+    name: "GetTheGK",
+    handle: "@getthegk",
+    platform: "Instagram & Facebook",
+    icon: Camera,
+    link: "https://instagram.com/getthegk",
+  },
+  {
+    name: "Educating Facts",
+    handle: "@educating.facts",
+    platform: "Instagram & Facebook",
+    icon: Camera,
+    link: "https://instagram.com/educating.facts",
+  },
+  {
+    name: "Freaky Knowledge",
+    handle: "@freaky.knowledge",
+    platform: "Instagram & Facebook",
+    icon: Camera,
+    link: "https://instagram.com/freaky.knowledge",
+  },
+  {
+    name: "Knowledgepedia",
+    handle: "@knowledgepedia",
+    platform: "Facebook",
+    icon: Globe,
+    link: "https://facebook.com",
+  },
+];
 
   return (
     <div style={{ fontFamily: theme.fonts.display, overflowX:"hidden", background: theme.colors.appBg }}>
@@ -87,6 +122,29 @@ export default function Home() {
         .art-card:hover { transform:translateY(-10px) !important; }
         .art-arr { transition:transform 0.25s ease; }
         .art-link:hover .art-arr { transform:translateX(5px); }
+        @media (max-width: 980px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 60px !important;
+  }
+
+  .hero-right {
+    padding-left: 0 !important;
+  }
+
+  .hero-left {
+    text-align: center;
+  }
+
+  .hero-desc {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .hero-btns {
+    justify-content: center;
+  }
+}
       `}</style>
 
       {/* Cursor glow */}
@@ -102,37 +160,327 @@ export default function Home() {
         <div style={{ position:"absolute",bottom:"5%",right:"-8%",width:"360px",height:"360px",borderRadius:"50%",background:"radial-gradient(circle,rgba(34,211,238,0.09) 0%,transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
         <div style={{ position:"absolute",top:"30%",left:"-6%",width:"300px",height:"300px",borderRadius:"50%",background:"radial-gradient(circle,rgba(255,214,0,0.07) 0%,transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
 
-        <div style={{ maxWidth:"820px",zIndex:2,position:"relative" }}>
-          <h1 style={{ fontWeight:900,fontSize:"clamp(2.8rem,6.5vw,4.6rem)",color:theme.colors.textPrimary,marginBottom:"1.3rem",letterSpacing:"-2px",lineHeight:1.05,fontFamily:theme.fonts.display,...anim(0.15) }}>
-            Learn Something{" "}
-            <span style={{ background:theme.gradients.shimmerBlue,backgroundSize:"200% auto",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",animation:"shimmerH 3s linear infinite",display:"inline-block" }}>
-              Extraordinary
-            </span>
-            <br />Every Single Day
-          </h1>
+<div
+  className="hero-grid"
+  style={{
+    maxWidth: "1280px",
+    width: "100%",
+    display: "grid",
+    gridTemplateColumns: "1.1fr 0.8fr",
+    gap: "90px",
+    alignItems: "center",
+    position: "relative",
+    zIndex: 2,
+  }}
+>
+  <div className="hero-left">
+  <h1
+    style={{
+      fontWeight: 900,
+      fontSize: "clamp(2.8rem,6.5vw,4.6rem)",
+      color: theme.colors.textPrimary,
+      marginBottom: "1.3rem",
+      letterSpacing: "-2px",
+      lineHeight: 1.05,
+      fontFamily: theme.fonts.display,
+      ...anim(0.15),
+    }}
+  >
+    Learn Something{" "}
+    <span
+      style={{
+        background: theme.gradients.shimmerBlue,
+        backgroundSize: "200% auto",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        animation: "shimmerH 3s linear infinite",
+        display: "inline-block",
+      }}
+    >
+      Extraordinary
+    </span>
+    <br />
+    Every Single Day
+  </h1>
 
-          <p style={{ color:theme.colors.textSecondary,fontSize:"clamp(1rem,2vw,1.12rem)",lineHeight:1.75,maxWidth:"560px",margin:"0 auto 2.8rem",fontFamily:theme.fonts.body,fontWeight:500,...anim(0.35) }}>
-            GK, Facts & Life Tips — curated, clean, and actually useful. No fluff. No clickbait. Just sharp knowledge.
-          </p>
+  <p
+    className="hero-desc"
+    style={{
+      color: theme.colors.textSecondary,
+      fontSize: "clamp(1rem,2vw,1.12rem)",
+      lineHeight: 1.75,
+      maxWidth: "560px",
+      margin: "0 auto 2.8rem",
+      fontFamily: theme.fonts.body,
+      fontWeight: 500,
+      ...anim(0.35),
+    }}
+  >
+    GK, Facts & Life Tips — curated, clean, and actually useful.
+    No fluff. No clickbait. Just sharp knowledge.
+  </p>
 
-          <div style={{ display:"flex",gap:"14px",justifyContent:"center",flexWrap:"wrap",...anim(0.5) }}>
-            <a href="#categories" style={{ textDecoration:"none",padding:"14px 34px",borderRadius:"14px",fontWeight:700,fontSize:"15px",background:theme.gradients.cardBlue,color:theme.colors.white,boxShadow:theme.shadows.ctaBlue,fontFamily:theme.fonts.display,transition:"transform 0.2s,box-shadow 0.2s" }}
-              onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 14px 40px rgba(79,140,255,0.55)"}}
-              onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow=theme.shadows.ctaBlue}}
-            >Explore Now →</a>
-            <Link to="/facts/funFacts" style={{ textDecoration:"none",padding:"14px 34px",borderRadius:"14px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.12)",color:theme.colors.textPrimary,backdropFilter:"blur(10px)",fontFamily:theme.fonts.display,transition:"all 0.2s ease" }}
-              onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.09)";e.currentTarget.style.transform="translateY(-3px)"}}
-              onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.05)";e.currentTarget.style.transform=""}}
-            >Browse Facts ⚡</Link>
+  <div
+    className="hero-btns"
+    style={{
+      display: "flex",
+      gap: "14px",
+      justifyContent: "center",
+      flexWrap: "wrap",
+      ...anim(0.5),
+    }}
+  >
+    <a
+      href="#categories"
+      style={{
+        textDecoration: "none",
+        padding: "14px 34px",
+        borderRadius: "14px",
+        fontWeight: 700,
+        fontSize: "15px",
+        background: theme.gradients.cardBlue,
+        color: theme.colors.white,
+        boxShadow: theme.shadows.ctaBlue,
+        fontFamily: theme.fonts.display,
+        transition: "transform 0.2s,box-shadow 0.2s",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-3px)";
+        e.currentTarget.style.boxShadow =
+          "0 14px 40px rgba(79,140,255,0.55)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "";
+        e.currentTarget.style.boxShadow = theme.shadows.ctaBlue;
+      }}
+    >
+      Explore Now →
+    </a>
+
+    <Link
+      to="/facts/funFacts"
+      style={{
+        textDecoration: "none",
+        padding: "14px 34px",
+        borderRadius: "14px",
+        fontWeight: 700,
+        fontSize: "15px",
+        background: "rgba(255,255,255,0.05)",
+        border: "1px solid rgba(255,255,255,0.06)",
+        color: theme.colors.textPrimary,
+        backdropFilter: "blur(10px)",
+        fontFamily: theme.fonts.display,
+        transition: "all 0.2s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = "rgba(255,255,255,0.09)";
+        e.currentTarget.style.transform = "translateY(-3px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+        e.currentTarget.style.transform = "";
+      }}
+    >
+      Browse Facts ⚡
+    </Link>
+  </div>
+</div>
+
+{/* RIGHT */}
+<div
+  className="hero-right"
+  style={{
+    position: "relative",
+    paddingLeft: "50px",
+  }}
+>
+  <div style={{ marginBottom: "22px" }}>
+    <span
+      style={{
+        color: theme.colors.textMuted,
+        fontSize: "13px",
+        letterSpacing: "3px",
+        fontWeight: 800,
+        textTransform: "uppercase",
+        fontFamily: theme.fonts.body,
+      }}
+    >
+      FIND US ON
+    </span>
+  </div>
+
+ <div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    gap: "14px",
+  }}
+>
+{socials.map((social, i) => {
+  const Icon = social.icon;
+
+  return (
+    <a
+      key={i}
+      href={social.link}
+      target="_blank"
+      rel="noreferrer"
+      style={{
+        textDecoration: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: "16px 18px",
+        borderRadius: "20px",
+        background: "rgba(255,255,255,0.035)",
+        border: "1px solid rgba(255,255,255,0.06)",
+        backdropFilter: "blur(18px)",
+        transition: "all 0.25s ease",
+        boxShadow: "0 8px 24px rgba(0,0,0,0.18)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateX(6px)";
+        e.currentTarget.style.borderColor =
+          "rgba(79,140,255,0.18)";
+        e.currentTarget.style.background =
+          "rgba(255,255,255,0.05)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "";
+        e.currentTarget.style.borderColor =
+          "rgba(255,255,255,0.06)";
+        e.currentTarget.style.background =
+          "rgba(255,255,255,0.035)";
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "15px",
+        }}
+      >
+        <div
+          style={{
+            width: "50px",
+            height: "50px",
+            borderRadius: "16px",
+            background: "rgba(79,140,255,0.10)",
+            border: "1px solid rgba(79,140,255,0.06)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: theme.colors.primary,
+            flexShrink: 0,
+          }}
+        >
+          <Icon size={22} strokeWidth={2.2} />
+        </div>
+
+        <div>
+          <div
+            style={{
+              color: theme.colors.textPrimary,
+              fontWeight: 700,
+              fontSize: "15px",
+              marginBottom: "3px",
+              fontFamily: theme.fonts.display,
+              letterSpacing: "-0.2px",
+            }}
+          >
+            {social.name}
+          </div>
+
+          <div
+            style={{
+              color: theme.colors.primary,
+              fontSize: "13px",
+              fontFamily: theme.fonts.body,
+              marginBottom: "3px",
+            }}
+          >
+            {social.handle}
+          </div>
+
+          <div
+            style={{
+              color: theme.colors.textMuted,
+              fontSize: "11.5px",
+              fontFamily: theme.fonts.body,
+              letterSpacing: "0.2px",
+            }}
+          >
+            {social.platform}
           </div>
         </div>
+      </div>
 
-        <div style={{ position:"absolute",bottom:"36px",left:"50%",transform:"translateX(-50%)",display:"flex",flexDirection:"column",alignItems:"center",gap:"6px",opacity:mounted?0.45:0,transition:"opacity 1s ease 1.2s" }}>
-          <span style={{ fontSize:"10px",color:theme.colors.textMuted,letterSpacing:"2.5px",textTransform:"uppercase",fontFamily:theme.fonts.body }}>scroll</span>
-          <div style={{ width:"1px",height:"40px",background:`linear-gradient(to bottom,${theme.colors.primary},transparent)` }} />
-        </div>
-      </section>
+      <div
+        style={{
+          color: "rgba(255,255,255,0.25)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+        }}
+      >
+        <ExternalLink size={17} strokeWidth={2} />
+      </div>
+    </a>
+  );
+})}
 
+  <p
+    style={{
+      marginTop: "26px",
+      color: theme.colors.textMuted,
+      lineHeight: 1.7,
+      fontSize: "14px",
+      fontFamily: theme.fonts.body,
+    }}
+  >
+    Stay connected for daily updates, facts, quizzes, and useful knowledge.
+  </p>
+</div>
+</div>
+</div>
+<div
+  style={{
+    position: "absolute",
+    bottom: "28px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "6px",
+    opacity: mounted ? 0.45 : 0,
+    transition: "opacity 1s ease 1.2s",
+    zIndex: 3,
+    pointerEvents: "none",
+  }}
+>
+  <span
+    style={{
+      fontSize: "10px",
+      color: theme.colors.textMuted,
+      letterSpacing: "2.5px",
+      textTransform: "uppercase",
+      fontFamily: theme.fonts.body,
+    }}
+  >
+    scroll
+  </span>
+
+  <div
+    style={{
+      width: "1px",
+      height: "40px",
+      background: `linear-gradient(to bottom,${theme.colors.primary},transparent)`,
+    }}
+  />
+</div>
+</section>
       {/* ── CATEGORIES ── */}
       <section id="categories" style={{ padding:"7rem 2rem" }}>
         <div style={{ maxWidth:"1140px",margin:"0 auto" }}>
@@ -189,7 +537,7 @@ export default function Home() {
                 onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 36px rgba(255,214,0,0.45)"}}
                 onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow=theme.shadows.ctaYellow}}
               >Start with GK →</Link>
-              <Link to="/facts/funFacts" style={{ textDecoration:"none",padding:"13px 28px",borderRadius:"12px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.12)",color:theme.colors.textPrimary,transition:"all 0.2s",fontFamily:theme.fonts.display }}
+              <Link to="/facts/funFacts" style={{ textDecoration:"none",padding:"13px 28px",borderRadius:"12px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.06)",color:theme.colors.textPrimary,transition:"all 0.2s",fontFamily:theme.fonts.display }}
                 onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.10)";e.currentTarget.style.transform="translateY(-3px)"}}
                 onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.06)";e.currentTarget.style.transform=""}}
               >Explore Facts ⚡</Link>

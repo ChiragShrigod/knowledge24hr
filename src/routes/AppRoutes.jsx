@@ -34,9 +34,9 @@ export default function AppRoutes() {
 
             {/* ── Redirect bare category routes to their default sub ── */}
             {/* This way /gk, /facts, /tips don't 404 and back-button works cleanly */}
-            <Route path="/gk"    element={<Navigate to="/gk/fullForms"   replace />} />
-            <Route path="/facts" element={<Navigate to="/facts/funFacts"  replace />} />
-            <Route path="/tips"  element={<Navigate to="/tips/health"     replace />} />
+            <Route path="/gk"    element={<Navigate to="/gk/fullForms" />} />
+            <Route path="/facts" element={<Navigate to="/facts/funFacts" />} />
+            <Route path="/tips"  element={<Navigate to="/tips/health"  />} />
             <Route path="/post/:slug"  element={<Content />} />
             <Route path="/privacy"     element={<PrivacyPolicy />} />
             <Route path="/about"       element={<AboutUs />} />
