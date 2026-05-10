@@ -427,7 +427,7 @@ export default function SubCategory() {
             onClick={() => setSelectedItem(null)}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
-            style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", background: "rgba(5,8,16,0.78)", backdropFilter: "blur(14px)" }}
+            style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", background: "rgba(5,8,16,0.88)", backdropFilter: "blur(14px)" }}
           >
 
 
@@ -438,9 +438,9 @@ export default function SubCategory() {
                 initial={{ opacity: 0, x: modalDir === 0 ? 0 : modalDir * 80, scale: modalDir === 0 ? 0.88 : 0.96 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: modalDir === 0 ? 0 : -modalDir * 80, scale: 0.96 }}
-                transition={{ type: "spring", stiffness: 500, damping: 36 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
                 onClick={e => e.stopPropagation()}
-                style={{ background: theme.colors.surfaceModal, borderRadius: "24px", padding: "2.4rem", maxWidth: "640px", width: "100%", border: `1px solid ${colors.accent}30`, boxShadow: `${theme.shadows.cardModal}, 0 0 60px ${colors.glow}`, backdropFilter: "blur(30px)", position: "relative", fontFamily: theme.fonts.body, maxHeight: "85vh", overflowY: "auto" }}
+                style={{ background: theme.colors.surfaceModal, borderRadius: "24px", padding: "2.4rem", maxWidth: "640px", width: "100%", border: `1px solid ${colors.accent}30`, boxShadow: `${theme.shadows.cardModal}, 0 0 60px ${colors.glow}`, position: "relative", fontFamily: theme.fonts.body, maxHeight: "85vh", overflowY: "auto" }}
               >
                 {/* Close btn */}
                 <button onClick={() => setSelectedItem(null)}
