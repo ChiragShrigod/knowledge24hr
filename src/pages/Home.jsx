@@ -1,10 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Camera,
-  Globe,
-  ExternalLink
-} from "lucide-react";
 import { theme } from "../common/theme";
 
 const CATEGORIES = [
@@ -31,16 +26,27 @@ const CATEGORIES = [
   },
 ];
 
-const LABEL_ACCENT = {
-  "gk": "#4F8CFF", "fun-facts": "#FFD600", "science-facts": "#a78bfa",
-  "random-facts": "#FFD600", "health": "#22D3EE", "motivation": "#f97316",
-  "self-improvement": "#22D3EE", "extremes": "#f87171", "full-forms": "#4F8CFF", "quiz": "#f472b6",
-}
-const LABEL_EMOJI = {
-  "gk": "🧠", "fun-facts": "⚡", "science-facts": "🔬",
-  "random-facts": "🎲", "health": "💚", "motivation": "🔥",
-  "self-improvement": "💡", "extremes": "🌍", "full-forms": "📚", "quiz": "❓",
-}
+const socials = [
+  {
+    name: "GetTheGK",
+    instagram: { handle: "@getthegk",        url: "https://instagram.com/getthegk" },
+    facebook:  { handle: "@getthegk",        url: "https://facebook.com/getthegk" },
+  },
+  {
+    name: "Educating Facts",
+    instagram: { handle: "@educating.facts", url: "https://instagram.com/educating.facts" },
+    facebook:  { handle: "@educating.facts", url: "https://facebook.com/educating.facts" },
+  },
+  {
+    name: "Freaky Knowledge",
+    instagram: { handle: "@freaky.knowledge", url: "https://instagram.com/freaky.knowledge" },
+    facebook:  { handle: "@freakyknowledge",  url: "https://facebook.com/freakyknowledge" },
+  },
+  {
+    name: "Knowledgepedia",
+    facebook: { handle: "@knowledgepedia", url: "https://facebook.com/knowledgepedia" },
+  },
+];
 
 function MagneticCard({ children, style, onClick }) {
   const ref = useRef(null);
@@ -59,92 +65,72 @@ function MagneticCard({ children, style, onClick }) {
   );
 }
 
-export default function Home() {
-  const [mounted,  setMounted]  = useState(false);
-  const [mouse,    setMouse]    = useState({ x:0, y:0 });
-  const [particles]             = useState(() => Array.from({length:18},(_,i)=>({ id:i, x:Math.random()*100, y:Math.random()*100, size:1.5+Math.random()*2.5, dur:10+Math.random()*16, delay:Math.random()*10, op:0.1+Math.random()*0.18, color:["#4F8CFF","#FFD600","#22D3EE","#a78bfa"][i%4] })));
-  const navigate   = useNavigate();
+const IgSVG = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+  </svg>
+);
 
-  useEffect(() => { const t = setTimeout(()=>setMounted(true),60); return ()=>clearTimeout(t); }, []);
+const FbSVG = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+  </svg>
+);
+
+export default function Home() {
+  const [mounted, setMounted] = useState(false);
+  const [atTop,   setAtTop]   = useState(true);
+  const [mouse,   setMouse]   = useState({ x: 0, y: 0 });
+  const [particles] = useState(() =>
+    Array.from({ length: 18 }, (_, i) => ({
+      id: i, x: Math.random() * 100, y: Math.random() * 100,
+      size: 1.5 + Math.random() * 2.5, dur: 10 + Math.random() * 16,
+      delay: Math.random() * 10, op: 0.1 + Math.random() * 0.18,
+      color: ["#4F8CFF","#FFD600","#22D3EE","#a78bfa"][i % 4],
+    }))
+  );
+  const navigate = useNavigate();
+
+  useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t); }, []);
+
+  // Hide scroll indicator when user scrolls, show again at top
   useEffect(() => {
-    const h = (e) => setMouse({x:e.clientX,y:e.clientY});
-    window.addEventListener("mousemove",h);
-    return () => window.removeEventListener("mousemove",h);
+    const onScroll = () => setAtTop(window.scrollY < 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const anim = (d=0) => ({
-    opacity:   mounted?1:0,
-    transform: mounted?"translateY(0)":"translateY(28px)",
-    transition:`opacity 0.8s ease ${d}s,transform 0.8s cubic-bezier(0.23,1,0.32,1) ${d}s`,
+  useEffect(() => {
+    const h = (e) => setMouse({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", h);
+    return () => window.removeEventListener("mousemove", h);
+  }, []);
+
+  const anim = (d = 0) => ({
+    opacity:   mounted ? 1 : 0,
+    transform: mounted ? "translateY(0)" : "translateY(28px)",
+    transition: `opacity 0.8s ease ${d}s, transform 0.8s cubic-bezier(0.23,1,0.32,1) ${d}s`,
   });
 
-  const def = { "/gk":"/gk/fullForms","/facts":"/facts/funFacts","/tips":"/tips/health" };
-const socials = [
-  {
-    name: "GetTheGK",
-    handle: "@getthegk",
-    platform: "Instagram & Facebook",
-    icon: Camera,
-    link: "https://instagram.com/getthegk",
-  },
-  {
-    name: "Educating Facts",
-    handle: "@educating.facts",
-    platform: "Instagram & Facebook",
-    icon: Camera,
-    link: "https://instagram.com/educating.facts",
-  },
-  {
-    name: "Freaky Knowledge",
-    handle: "@freaky.knowledge",
-    platform: "Instagram & Facebook",
-    icon: Camera,
-    link: "https://instagram.com/freaky.knowledge",
-  },
-  {
-    name: "Knowledgepedia",
-    handle: "@knowledgepedia",
-    platform: "Facebook",
-    icon: Globe,
-    link: "https://facebook.com",
-  },
-];
+  const def = { "/gk": "/gk/fullForms", "/facts": "/facts/funFacts", "/tips": "/tips/health" };
 
   return (
-    <div style={{ fontFamily: theme.fonts.display, overflowX:"hidden", background: theme.colors.appBg }}>
+    <div style={{ fontFamily: theme.fonts.display, overflowX: "hidden", background: theme.colors.appBg }}>
       <style>{`
         @keyframes floatP { 0%,100%{transform:translateY(0) scale(1);opacity:var(--op)} 50%{transform:translateY(-20px) scale(1.08);opacity:calc(var(--op)*1.5)} }
         @keyframes shimmerH { 0%{background-position:-200% center} 100%{background-position:200% center} }
         @keyframes fadeUpH { from{opacity:0;transform:translateY(36px)} to{opacity:1;transform:translateY(0)} }
         @keyframes gridP { 0%,100%{opacity:0.035} 50%{opacity:0.07} }
         @keyframes pRing { 0%{transform:scale(1);opacity:0.6} 100%{transform:scale(2.3);opacity:0} }
-        .art-card { transition:transform 0.35s cubic-bezier(0.23,1,0.32,1),box-shadow 0.3s,border-color 0.3s; }
-        .art-card:hover { transform:translateY(-10px) !important; }
-        .art-arr { transition:transform 0.25s ease; }
-        .art-link:hover .art-arr { transform:translateX(5px); }
         @media (max-width: 980px) {
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-    gap: 60px !important;
-  }
-
-  .hero-right {
-    padding-left: 0 !important;
-  }
-
-  .hero-left {
-    text-align: center;
-  }
-
-  .hero-desc {
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .hero-btns {
-    justify-content: center;
-  }
-}
+          .hero-grid { grid-template-columns: 1fr !important; gap: 60px !important; }
+          .hero-right { padding-left: 0 !important; }
+          .hero-left { text-align: center; }
+          .hero-desc { margin-left: auto !important; margin-right: auto !important; }
+          .hero-btns { justify-content: center; }
+        }
       `}</style>
 
       {/* Cursor glow */}
@@ -153,334 +139,110 @@ const socials = [
       {/* ── HERO ── */}
       <section style={{ minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",padding:"130px 2rem 80px",textAlign:"center",position:"relative",overflow:"hidden" }}>
         <div style={{ position:"absolute",inset:0,backgroundImage:"linear-gradient(rgba(79,140,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(79,140,255,0.04) 1px,transparent 1px)",backgroundSize:"60px 60px",animation:"gridP 4s ease-in-out infinite" }} />
-        {particles.map(p=>(
+        {particles.map(p => (
           <div key={p.id} style={{ position:"absolute",left:`${p.x}%`,top:`${p.y}%`,width:p.size,height:p.size,borderRadius:"50%",background:p.color,"--op":p.op,opacity:p.op,animation:`floatP ${p.dur}s ease-in-out ${p.delay}s infinite`,pointerEvents:"none" }} />
         ))}
         <div style={{ position:"absolute",top:"8%",left:"50%",transform:"translateX(-50%)",width:"650px",height:"650px",borderRadius:"50%",background:"radial-gradient(circle,rgba(79,140,255,0.12) 0%,transparent 70%)",filter:"blur(50px)",pointerEvents:"none" }} />
         <div style={{ position:"absolute",bottom:"5%",right:"-8%",width:"360px",height:"360px",borderRadius:"50%",background:"radial-gradient(circle,rgba(34,211,238,0.09) 0%,transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
         <div style={{ position:"absolute",top:"30%",left:"-6%",width:"300px",height:"300px",borderRadius:"50%",background:"radial-gradient(circle,rgba(255,214,0,0.07) 0%,transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
 
-<div
-  className="hero-grid"
-  style={{
-    maxWidth: "1280px",
-    width: "100%",
-    display: "grid",
-    gridTemplateColumns: "1.1fr 0.8fr",
-    gap: "90px",
-    alignItems: "center",
-    position: "relative",
-    zIndex: 2,
-  }}
->
-  <div className="hero-left">
-  <h1
-    style={{
-      fontWeight: 900,
-      fontSize: "clamp(2.8rem,6.5vw,4.6rem)",
-      color: theme.colors.textPrimary,
-      marginBottom: "1.3rem",
-      letterSpacing: "-2px",
-      lineHeight: 1.05,
-      fontFamily: theme.fonts.display,
-      ...anim(0.15),
-    }}
-  >
-    Learn Something{" "}
-    <span
-      style={{
-        background: theme.gradients.shimmerBlue,
-        backgroundSize: "200% auto",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        animation: "shimmerH 3s linear infinite",
-        display: "inline-block",
-      }}
-    >
-      Extraordinary
-    </span>
-    <br />
-    Every Single Day
-  </h1>
+        <div className="hero-grid" style={{ maxWidth:"1280px",width:"100%",display:"grid",gridTemplateColumns:"1.1fr 0.8fr",gap:"90px",alignItems:"center",position:"relative",zIndex:2 }}>
 
-  <p
-    className="hero-desc"
-    style={{
-      color: theme.colors.textSecondary,
-      fontSize: "clamp(1rem,2vw,1.12rem)",
-      lineHeight: 1.75,
-      maxWidth: "560px",
-      margin: "0 auto 2.8rem",
-      fontFamily: theme.fonts.body,
-      fontWeight: 500,
-      ...anim(0.35),
-    }}
-  >
-    GK, Facts & Life Tips — curated, clean, and actually useful.
-    No fluff. No clickbait. Just sharp knowledge.
-  </p>
+          {/* LEFT */}
+          <div className="hero-left">
+            <h1 style={{ fontWeight:900,fontSize:"clamp(2.8rem,6.5vw,4.6rem)",color:theme.colors.textPrimary,marginBottom:"1.3rem",letterSpacing:"-2px",lineHeight:1.05,fontFamily:theme.fonts.display,...anim(0.15) }}>
+              Learn Something{" "}
+              <span style={{ background:theme.gradients.shimmerBlue,backgroundSize:"200% auto",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",animation:"shimmerH 3s linear infinite",display:"inline-block" }}>
+                Extraordinary
+              </span>
+              <br />Every Single Day
+            </h1>
 
-  <div
-    className="hero-btns"
-    style={{
-      display: "flex",
-      gap: "14px",
-      justifyContent: "center",
-      flexWrap: "wrap",
-      ...anim(0.5),
-    }}
-  >
-    <a
-      href="#categories"
-      style={{
-        textDecoration: "none",
-        padding: "14px 34px",
-        borderRadius: "14px",
-        fontWeight: 700,
-        fontSize: "15px",
-        background: theme.gradients.cardBlue,
-        color: theme.colors.white,
-        boxShadow: theme.shadows.ctaBlue,
-        fontFamily: theme.fonts.display,
-        transition: "transform 0.2s,box-shadow 0.2s",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-3px)";
-        e.currentTarget.style.boxShadow =
-          "0 14px 40px rgba(79,140,255,0.55)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "";
-        e.currentTarget.style.boxShadow = theme.shadows.ctaBlue;
-      }}
-    >
-      Explore Now →
-    </a>
+            <p className="hero-desc" style={{ color:theme.colors.textSecondary,fontSize:"clamp(1rem,2vw,1.12rem)",lineHeight:1.75,maxWidth:"560px",margin:"0 auto 2.8rem",fontFamily:theme.fonts.body,fontWeight:500,...anim(0.35) }}>
+              GK, Facts & Life Tips — curated, clean, and actually useful.
+              No fluff. No clickbait. Just sharp knowledge.
+            </p>
 
-    <Link
-      to="/facts/funFacts"
-      style={{
-        textDecoration: "none",
-        padding: "14px 34px",
-        borderRadius: "14px",
-        fontWeight: 700,
-        fontSize: "15px",
-        background: "rgba(255,255,255,0.05)",
-        border: "1px solid rgba(255,255,255,0.06)",
-        color: theme.colors.textPrimary,
-        backdropFilter: "blur(10px)",
-        fontFamily: theme.fonts.display,
-        transition: "all 0.2s ease",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = "rgba(255,255,255,0.09)";
-        e.currentTarget.style.transform = "translateY(-3px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-        e.currentTarget.style.transform = "";
-      }}
-    >
-      Browse Facts ⚡
-    </Link>
-  </div>
-</div>
+            <div className="hero-btns" style={{ display:"flex",gap:"14px",justifyContent:"center",flexWrap:"wrap",...anim(0.5) }}>
+              <a href="#categories"
+                style={{ textDecoration:"none",padding:"14px 34px",borderRadius:"14px",fontWeight:700,fontSize:"15px",background:theme.gradients.cardBlue,color:theme.colors.white,boxShadow:theme.shadows.ctaBlue,fontFamily:theme.fonts.display,transition:"transform 0.2s,box-shadow 0.2s" }}
+                onMouseEnter={e=>{ e.currentTarget.style.transform="translateY(-3px)"; e.currentTarget.style.boxShadow="0 14px 40px rgba(79,140,255,0.55)"; }}
+                onMouseLeave={e=>{ e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=theme.shadows.ctaBlue; }}
+              >Explore Now →</a>
 
-{/* RIGHT */}
-<div
-  className="hero-right"
-  style={{
-    position: "relative",
-    paddingLeft: "50px",
-  }}
->
-  <div style={{ marginBottom: "22px" }}>
-    <span
-      style={{
-        color: theme.colors.textMuted,
-        fontSize: "13px",
-        letterSpacing: "3px",
-        fontWeight: 800,
-        textTransform: "uppercase",
-        fontFamily: theme.fonts.body,
-      }}
-    >
-      FIND US ON
-    </span>
-  </div>
-
- <div
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    gap: "14px",
-  }}
->
-{socials.map((social, i) => {
-  const Icon = social.icon;
-
-  return (
-    <a
-      key={i}
-      href={social.link}
-      target="_blank"
-      rel="noreferrer"
-      style={{
-        textDecoration: "none",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "16px 18px",
-        borderRadius: "20px",
-        background: "rgba(255,255,255,0.035)",
-        border: "1px solid rgba(255,255,255,0.06)",
-        backdropFilter: "blur(18px)",
-        transition: "all 0.25s ease",
-        boxShadow: "0 8px 24px rgba(0,0,0,0.18)",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateX(6px)";
-        e.currentTarget.style.borderColor =
-          "rgba(79,140,255,0.18)";
-        e.currentTarget.style.background =
-          "rgba(255,255,255,0.05)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "";
-        e.currentTarget.style.borderColor =
-          "rgba(255,255,255,0.06)";
-        e.currentTarget.style.background =
-          "rgba(255,255,255,0.035)";
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "15px",
-        }}
-      >
-        <div
-          style={{
-            width: "50px",
-            height: "50px",
-            borderRadius: "16px",
-            background: "rgba(79,140,255,0.10)",
-            border: "1px solid rgba(79,140,255,0.06)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: theme.colors.primary,
-            flexShrink: 0,
-          }}
-        >
-          <Icon size={22} strokeWidth={2.2} />
-        </div>
-
-        <div>
-          <div
-            style={{
-              color: theme.colors.textPrimary,
-              fontWeight: 700,
-              fontSize: "15px",
-              marginBottom: "3px",
-              fontFamily: theme.fonts.display,
-              letterSpacing: "-0.2px",
-            }}
-          >
-            {social.name}
+              <Link to="/facts/funFacts"
+                style={{ textDecoration:"none",padding:"14px 34px",borderRadius:"14px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.06)",color:theme.colors.textPrimary,backdropFilter:"blur(10px)",fontFamily:theme.fonts.display,transition:"all 0.2s ease" }}
+                onMouseEnter={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.09)"; e.currentTarget.style.transform="translateY(-3px)"; }}
+                onMouseLeave={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.05)"; e.currentTarget.style.transform=""; }}
+              >Browse Facts ⚡</Link>
+            </div>
           </div>
 
-          <div
-            style={{
-              color: theme.colors.primary,
-              fontSize: "13px",
-              fontFamily: theme.fonts.body,
-              marginBottom: "3px",
-            }}
-          >
-            {social.handle}
-          </div>
+          {/* RIGHT — clean social account rows, no platform buttons */}
+          <div className="hero-right" style={{ position:"relative",paddingLeft:"10px",maxWidth:"550px",width:"100%"}}>
+            <div style={{ marginBottom:"18px", ...anim(0.32) }}>
+              <span style={{ color:theme.colors.textMuted,fontSize:"11px",letterSpacing:"3px",fontWeight:800,textTransform:"uppercase",fontFamily:theme.fonts.body }}>
+                FIND US ON
+              </span>
+            </div>
 
-          <div
-            style={{
-              color: theme.colors.textMuted,
-              fontSize: "11.5px",
-              fontFamily: theme.fonts.body,
-              letterSpacing: "0.2px",
-            }}
-          >
-            {social.platform}
+            <div style={{ display:"flex",flexDirection:"column",gap:"12px" }}>
+              {socials.map((s, i) => (
+                <div key={i}
+              style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 20px",borderRadius:"16px",background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.055)",backdropFilter:"blur(12px)",gap:"18px",opacity:mounted?1:0,transform:mounted?"translateY(0)":"translateY(30px)",transition:`all 0.7s cubic-bezier(0.23,1,0.32,1) ${0.45 + i * 0.12}s` }}                  onMouseEnter={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor="rgba(79,140,255,0.2)"; e.currentTarget.style.transform="translateX(5px)"; }}
+                  onMouseLeave={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.03)"; e.currentTarget.style.borderColor="rgba(255,255,255,0.055)"; e.currentTarget.style.transform=""; }}
+                >
+                  {/* Name + handle stacked */}
+                  <div style={{ minWidth:0 }}>
+                    <div style={{ color:theme.colors.textPrimary,fontWeight:700,fontSize:"15px",fontFamily:theme.fonts.display,whiteSpace:"nowrap",marginBottom:"2px" }}>
+                      {s.name}
+                    </div>
+                    <div style={{ color:theme.colors.primary,fontSize:"12px",fontWeight:500,whiteSpace:"nowrap" }}>
+                      {s.instagram ? s.instagram.handle : s.facebook.handle}
+                    </div>
+                  </div>
+
+                  {/* Platform icons on the right */}
+                  <div style={{ display:"flex",gap:"6px",flexShrink:0 }}>
+                    {s.instagram && (
+                      <a href={s.instagram.url} target="_blank" rel="noopener noreferrer"
+                        style={{ width:"36px",height:"36px",borderRadius:"7px",background:"rgba(225,48,108,0.1)",border:"1px solid rgba(225,48,108,0.22)",display:"flex",alignItems:"center",justifyContent:"center",color:"#E1306C",textDecoration:"none",transition:"all 0.18s ease",flexShrink:0 }}
+                        onMouseEnter={e=>{ e.currentTarget.style.background="rgba(225,48,108,0.22)"; e.currentTarget.style.transform="scale(1.15)"; }}
+                        onMouseLeave={e=>{ e.currentTarget.style.background="rgba(225,48,108,0.1)"; e.currentTarget.style.transform=""; }}
+                      ><IgSVG /></a>
+                    )}
+                    {s.facebook && (
+                      <a href={s.facebook.url} target="_blank" rel="noopener noreferrer"
+                        style={{ width:"36px",height:"36px",borderRadius:"7px",background:"rgba(24,119,242,0.1)",border:"1px solid rgba(24,119,242,0.22)",display:"flex",alignItems:"center",justifyContent:"center",color:"#1877F2",textDecoration:"none",transition:"all 0.18s ease",flexShrink:0 }}
+                        onMouseEnter={e=>{ e.currentTarget.style.background="rgba(24,119,242,0.22)"; e.currentTarget.style.transform="scale(1.15)"; }}
+                        onMouseLeave={e=>{ e.currentTarget.style.background="rgba(24,119,242,0.1)"; e.currentTarget.style.transform=""; }}
+                      ><FbSVG /></a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p style={{ marginTop:"14px", ...anim(0.95),color:theme.colors.textMuted,fontSize:"12px",lineHeight:1.65,fontFamily:theme.fonts.body }}>
+              Stay connected for daily updates, facts, quizzes, and useful knowledge.
+            </p>
           </div>
         </div>
-      </div>
 
-      <div
-        style={{
-          color: "rgba(255,255,255,0.25)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}
-      >
-        <ExternalLink size={17} strokeWidth={2} />
-      </div>
-    </a>
-  );
-})}
+        {/* Scroll indicator — disappears on scroll, returns at top */}
+        <div style={{
+          position:"absolute",bottom:"28px",left:"50%",
+          transform:"translateX(-50%)",
+          display:"flex",flexDirection:"column",alignItems:"center",gap:"6px",
+          opacity: mounted && atTop ? 0.45 : 0,
+          transition:"opacity 0.5s ease",
+          zIndex:3,pointerEvents:"none",
+        }}>
+          <span style={{ fontSize:"10px",color:theme.colors.textMuted,letterSpacing:"2.5px",textTransform:"uppercase",fontFamily:theme.fonts.body }}>scroll</span>
+          <div style={{ width:"1px",height:"40px",background:`linear-gradient(to bottom,${theme.colors.primary},transparent)` }} />
+        </div>
+      </section>
 
-  <p
-    style={{
-      marginTop: "26px",
-      color: theme.colors.textMuted,
-      lineHeight: 1.7,
-      fontSize: "14px",
-      fontFamily: theme.fonts.body,
-    }}
-  >
-    Stay connected for daily updates, facts, quizzes, and useful knowledge.
-  </p>
-</div>
-</div>
-</div>
-<div
-  style={{
-    position: "absolute",
-    bottom: "28px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "6px",
-    opacity: mounted ? 0.45 : 0,
-    transition: "opacity 1s ease 1.2s",
-    zIndex: 3,
-    pointerEvents: "none",
-  }}
->
-  <span
-    style={{
-      fontSize: "10px",
-      color: theme.colors.textMuted,
-      letterSpacing: "2.5px",
-      textTransform: "uppercase",
-      fontFamily: theme.fonts.body,
-    }}
-  >
-    scroll
-  </span>
-
-  <div
-    style={{
-      width: "1px",
-      height: "40px",
-      background: `linear-gradient(to bottom,${theme.colors.primary},transparent)`,
-    }}
-  />
-</div>
-</section>
       {/* ── CATEGORIES ── */}
       <section id="categories" style={{ padding:"7rem 2rem" }}>
         <div style={{ maxWidth:"1140px",margin:"0 auto" }}>
@@ -533,11 +295,13 @@ const socials = [
             <h2 style={{ fontWeight:900,fontSize:"clamp(1.5rem,3vw,2.2rem)",color:theme.colors.textPrimary,marginBottom:"0.8rem",letterSpacing:"-0.6px",fontFamily:theme.fonts.display }}>Ready to get smarter?</h2>
             <p style={{ color:theme.colors.textSecondary,fontSize:"15px",marginBottom:"2rem",lineHeight:1.65,fontFamily:theme.fonts.body }}>Dive into hundreds of curated facts, GK questions, and practical life tips.</p>
             <div style={{ display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap" }}>
-              <Link to="/gk/fullForms" style={{ textDecoration:"none",padding:"13px 28px",borderRadius:"12px",fontWeight:700,fontSize:"15px",background:theme.gradients.cardYellow,color:theme.colors.textInverse,boxShadow:theme.shadows.ctaYellow,transition:"transform 0.2s,box-shadow 0.2s",fontFamily:theme.fonts.display }}
+              <Link to="/gk/fullForms"
+                style={{ textDecoration:"none",padding:"13px 28px",borderRadius:"12px",fontWeight:700,fontSize:"15px",background:theme.gradients.cardYellow,color:theme.colors.textInverse,boxShadow:theme.shadows.ctaYellow,transition:"transform 0.2s,box-shadow 0.2s",fontFamily:theme.fonts.display }}
                 onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 36px rgba(255,214,0,0.45)"}}
                 onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow=theme.shadows.ctaYellow}}
               >Start with GK →</Link>
-              <Link to="/facts/funFacts" style={{ textDecoration:"none",padding:"13px 28px",borderRadius:"12px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.06)",color:theme.colors.textPrimary,transition:"all 0.2s",fontFamily:theme.fonts.display }}
+              <Link to="/facts/funFacts"
+                style={{ textDecoration:"none",padding:"13px 28px",borderRadius:"12px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.06)",color:theme.colors.textPrimary,transition:"all 0.2s",fontFamily:theme.fonts.display }}
                 onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.10)";e.currentTarget.style.transform="translateY(-3px)"}}
                 onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.06)";e.currentTarget.style.transform=""}}
               >Explore Facts ⚡</Link>

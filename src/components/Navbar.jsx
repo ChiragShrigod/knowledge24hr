@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { theme } from "../common/theme";
 
 export default function Navbar() {
@@ -46,19 +46,18 @@ export default function Navbar() {
         maxWidth: "1200px", margin: "0 auto",
         height: "66px", display: "flex",
         alignItems: "center", justifyContent: "space-between",
-        padding: "0 2rem",
+        padding: "0 2rem 0 1rem",
       }}>
 
-        {/* LOGO */}
-        <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px" }}>
-          <div style={{
-            width: "34px", height: "34px",
-            background: "linear-gradient(135deg, #1565C0 0%, #42A5F5 100%)",
-            borderRadius: "9px",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontWeight: 800, fontSize: "17px", color: "#fff",
-          }}>K</div>
-          <span style={{ fontWeight: 800, fontSize: "17px", color: theme.colors.textPrimary }}>
+        {/* BRAND — no logo box */}
+        <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+          <span style={{
+            fontWeight: 800,
+            fontSize: "22px",
+            color: theme.colors.textPrimary,
+            fontFamily: theme.fonts.display,
+            letterSpacing: "-0.5px",
+          }}>
             Knowledge<span style={{ color: "#FFD600" }}>24hr</span>
           </span>
         </Link>
@@ -69,15 +68,12 @@ export default function Navbar() {
             const active = isActive(link);
             return (
               <Link
-               key={link.path}
+                key={link.path}
                 to={getTo(link)}
-                replace={
-                  location.pathname !== "/" && 
-                  location.pathname !== link.path
-                }
+                replace={location.pathname !== "/" && location.pathname !== link.path}
                 style={{
                   textDecoration: "none",
-                  padding: "7px 14px",
+                  padding: "7px 16px",
                   borderRadius: "8px",
                   fontWeight: 600,
                   fontSize: "14px",
@@ -108,7 +104,7 @@ export default function Navbar() {
             to="/gk/fullForms"
             style={{
               textDecoration: "none",
-              marginLeft: "10px",
+              marginLeft: "14px",
               padding: "9px 22px",
               borderRadius: "9px",
               fontWeight: 700,
@@ -117,6 +113,7 @@ export default function Navbar() {
               color: "#0B0F19",
               boxShadow: theme.shadows.glowYellow,
               transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              fontFamily: theme.fonts.display,
             }}
             onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; }}
             onMouseLeave={e => { e.currentTarget.style.transform = ""; }}
