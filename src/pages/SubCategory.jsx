@@ -107,8 +107,7 @@ export default function SubCategory() {
   const [viewMode,     setViewMode]     = useState("grid");
   const [currentPage,  setCurrentPage]  = useState(1);
 
-  // ── MODAL NAVIGATION STATE ──
-  const [modalDir, setModalDir] = useState(0); // -1 = prev, 1 = next
+  const [modalDir, setModalDir] = useState(0);
   const touchStartX = useRef(null);
 
   const bloggerLabel = LABEL_MAP[subLower] || subLower;
@@ -147,7 +146,6 @@ export default function SubCategory() {
 
   const goTab = useCallback((route) => navigate(route, { replace: true }), [navigate]);
 
-  // ── MODAL NAVIGATION HELPERS ──
   const selectedIndex = selectedItem ? filtered.findIndex(p => p.id === selectedItem.id) : -1;
   const hasPrev = selectedIndex > 0;
   const hasNext = selectedIndex < filtered.length - 1;
@@ -159,7 +157,6 @@ export default function SubCategory() {
     setSelectedItem(filtered[next]);
   }, [selectedIndex, filtered]);
 
-  // ── KEYBOARD NAVIGATION ──
   useEffect(() => {
     if (!selectedItem) return;
     const handler = (e) => {
@@ -171,7 +168,6 @@ export default function SubCategory() {
     return () => window.removeEventListener("keydown", handler);
   }, [selectedItem, goModal]);
 
-  // ── SWIPE HANDLERS ──
   const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
   const onTouchEnd   = (e) => {
     if (touchStartX.current === null) return;
@@ -216,11 +212,22 @@ export default function SubCategory() {
         .modal-nav-btn { transition: all 0.2s ease !important; }
         .modal-nav-btn:hover:not(:disabled) { transform: scale(1.12) !important; }
         .modal-nav-btn:active:not(:disabled) { transform: scale(0.94) !important; }
+
+        /* ── MOBILE RESPONSIVE ── */
+        @media (max-width: 640px) {
+          .sc-preview-col { display: none !important; }
+          .sc-date-col    { display: none !important; }
+          .sc-action-col  { display: none !important; }
+          .sc-header-row  { flex-direction: column !important; align-items: flex-start !important; gap: 0.75rem !important; }
+          .sc-search-controls { width: 100% !important; flex-wrap: wrap !important; }
+          .sc-search-input { width: 100% !important; flex: 1 !important; }
+          .sc-search-input input { width: 100% !important; }
+        }
       `}</style>
 
       {/* ══ HEADER ══ */}
       <div style={{ marginBottom: "2.6rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
           <span onClick={() => navigate("/")}
             style={{ color: theme.colors.textMuted, fontSize: "13px", cursor: "pointer", fontWeight: 600, fontFamily: theme.fonts.body, transition: "color 0.2s" }}
             onMouseEnter={e => e.currentTarget.style.color = colors.accent}
@@ -232,7 +239,8 @@ export default function SubCategory() {
           <span style={{ color: theme.colors.textSecondary, fontSize: "13px", fontWeight: 600, fontFamily: theme.fonts.body }}>{sub}</span>
         </div>
 
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+        {/* ── HEADER ROW (title + search) — stacks on mobile ── */}
+        <div className="sc-header-row" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
           <div>
             <h1 style={{ fontSize: "clamp(1.8rem,4vw,2.8rem)", fontWeight: 800, fontFamily: theme.fonts.heading, letterSpacing: "-0.8px", lineHeight: 1.1, color: theme.colors.textPrimary, textShadow: `0 0 48px ${colors.accent}70`, margin: "0 0 8px" }}>
               {sub}
@@ -244,15 +252,16 @@ export default function SubCategory() {
             </p>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(255,255,255,0.04)", border: `1px solid ${search ? colors.accent + "55" : "rgba(255,255,255,0.09)"}`, borderRadius: "12px", padding: "10px 16px", transition: "border 0.25s ease, box-shadow 0.25s ease", boxShadow: search ? `0 0 20px ${colors.glow}` : "none" }}>
+          {/* ── SEARCH + VIEW TOGGLE — wraps on mobile ── */}
+          <div className="sc-search-controls" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div className="sc-search-input" style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(255,255,255,0.04)", border: `1px solid ${search ? colors.accent + "55" : "rgba(255,255,255,0.09)"}`, borderRadius: "12px", padding: "10px 16px", transition: "border 0.25s ease, box-shadow 0.25s ease", boxShadow: search ? `0 0 20px ${colors.glow}` : "none" }}>
               <span style={{ fontSize: "15px", opacity: 0.5 }}>🔍</span>
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder={`Search ${sub}...`}
                 style={{ background: "none", border: "none", outline: "none", color: theme.colors.textPrimary, fontSize: "14px", fontWeight: 500, fontFamily: theme.fonts.body, width: "160px", caretColor: colors.accent }} />
               {search && <span onClick={() => setSearch("")} style={{ color: theme.colors.textMuted, cursor: "pointer", fontSize: "13px", fontWeight: 700 }}>✕</span>}
             </div>
 
-            <div style={{ display: "flex", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: "12px", overflow: "hidden" }}>
+            <div style={{ display: "flex", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: "12px", overflow: "hidden", flexShrink: 0 }}>
               {[{ mode: "grid", Icon: GridIcon }, { mode: "table", Icon: TableIcon }].map(({ mode, Icon }) => {
                 const isOn = viewMode === mode;
                 return (
@@ -284,7 +293,7 @@ export default function SubCategory() {
 
       {/* ══ LOADING SKELETONS ══ */}
       {loading && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "24px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))", gap: "24px" }}>
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", padding: "26px 28px", height: "200px", border: "1px solid rgba(255,255,255,0.07)", animation: `fadeUpCard 0.52s ease ${i * 0.05}s both`, overflow: "hidden", position: "relative" }}>
               <div style={{ position: "absolute", top: 0, left: "-100%", width: "200%", height: "100%", background: `linear-gradient(90deg, transparent 0%, ${colors.accent}08 50%, transparent 100%)`, animation: "shimmer 1.5s infinite" }} />
@@ -321,7 +330,7 @@ export default function SubCategory() {
       {/* ══ GRID ══ */}
       {!loading && !error && filtered.length > 0 && viewMode === "grid" && (
         <>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))", gap: "24px" }}>
             {paginated.map((post, index) => (
               <div key={post.id} className="sc-card" onClick={() => { setModalDir(0); setSelectedItem(post); }}
                 style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", padding: "26px 28px", cursor: "pointer", border: "1px solid rgba(255,255,255,0.07)", boxShadow: "0 6px 30px rgba(0,0,0,0.35)", transition: "transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease, border-color 0.3s ease", position: "relative", overflow: "hidden", animation: `fadeUpCard 0.52s ease ${Math.min(index * 0.04, 0.48)}s both`, willChange: "transform" }}
@@ -372,13 +381,18 @@ export default function SubCategory() {
       {/* ══ TABLE ══ */}
       {!loading && !error && filtered.length > 0 && viewMode === "table" && (
         <>
-          <div style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.07)", overflow: "hidden"}}>
+          <div style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.07)", overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: theme.fonts.body }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-                  {["Title", "Preview", "Date", ""].map((col, i) => (
-                    <th key={i} style={{ padding: "14px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: theme.colors.textMuted, letterSpacing: "1px", textTransform: "uppercase", background: "rgba(255,255,255,0.02)", fontFamily: theme.fonts.heading }}>{col}</th>
-                  ))}
+                  {/* Title col — always visible */}
+                  <th style={{ padding: "14px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: theme.colors.textMuted, letterSpacing: "1px", textTransform: "uppercase", background: "rgba(255,255,255,0.02)", fontFamily: theme.fonts.heading }}>Title</th>
+                  {/* Preview — hidden on mobile */}
+                  <th className="sc-preview-col" style={{ padding: "14px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: theme.colors.textMuted, letterSpacing: "1px", textTransform: "uppercase", background: "rgba(255,255,255,0.02)", fontFamily: theme.fonts.heading }}>Preview</th>
+                  {/* Date — hidden on mobile */}
+                  <th className="sc-date-col" style={{ padding: "14px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: theme.colors.textMuted, letterSpacing: "1px", textTransform: "uppercase", background: "rgba(255,255,255,0.02)", fontFamily: theme.fonts.heading }}>Date</th>
+                  {/* Action — hidden on mobile */}
+                  <th className="sc-action-col" style={{ padding: "14px 16px", textAlign: "left", fontSize: "11px", fontWeight: 700, color: theme.colors.textMuted, letterSpacing: "1px", textTransform: "uppercase", background: "rgba(255,255,255,0.02)", fontFamily: theme.fonts.heading }}></th>
                 </tr>
               </thead>
               <tbody>
@@ -386,7 +400,8 @@ export default function SubCategory() {
                   <tr key={post.id} className="sc-tr" onClick={() => { setModalDir(0); setSelectedItem(post); }}
                     style={{ borderBottom: index < paginated.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none", cursor: "pointer", transition: "background 0.18s ease" }}
                   >
-                    <td style={{ padding: "14px 16px", minWidth: "200px" }}>
+                    {/* Title — always visible */}
+                    <td style={{ padding: "14px 16px", minWidth: "160px" }}>
                       <div style={{ fontWeight: 700, fontSize: "14px", color: theme.colors.textPrimary, lineHeight: 1.3, fontFamily: theme.fonts.heading }}>
                         <Highlight text={post.title} query={search} />
                       </div>
@@ -398,15 +413,18 @@ export default function SubCategory() {
                         </div>
                       )}
                     </td>
-                    <td style={{ padding: "14px 16px", maxWidth: "320px" }}>
+                    {/* Preview — hidden on mobile */}
+                    <td className="sc-preview-col" style={{ padding: "14px 16px", maxWidth: "320px" }}>
                       <span style={{ color: theme.colors.textMuted, fontSize: "13px", lineHeight: 1.5, fontFamily: theme.fonts.body, ...excerptClampStyle }}>
                         <Highlight text={post.excerpt || ""} query={search} />
                       </span>
                     </td>
-                    <td style={{ padding: "14px 16px", whiteSpace: "nowrap" }}>
+                    {/* Date — hidden on mobile */}
+                    <td className="sc-date-col" style={{ padding: "14px 16px", whiteSpace: "nowrap" }}>
                       <span style={{ color: theme.colors.textFaint, fontSize: "12px", fontFamily: theme.fonts.body }}>{fmtDate(post.published)}</span>
                     </td>
-                    <td style={{ padding: "14px 16px", textAlign: "right" }}>
+                    {/* Action — hidden on mobile */}
+                    <td className="sc-action-col" style={{ padding: "14px 16px", textAlign: "right" }}>
                       <span style={{ color: colors.accent, fontSize: "12px", fontWeight: 700, fontFamily: theme.fonts.body }}>View →</span>
                     </td>
                   </tr>
@@ -427,11 +445,8 @@ export default function SubCategory() {
             onClick={() => setSelectedItem(null)}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
-            style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", background: "rgba(5,8,16,0.88)"}}
+            style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem", background: "rgba(5,8,16,0.88)" }}
           >
-
-
-            {/* ── MODAL CARD ── */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedItem.id}
@@ -468,7 +483,7 @@ export default function SubCategory() {
                   </div>
                 )}
 
-                <h2 style={{ fontSize: "24px", fontWeight: 800, color: theme.colors.textPrimary, marginBottom: "10px", letterSpacing: "-0.4px", lineHeight: 1.2, paddingRight: "40px", fontFamily: theme.fonts.heading }}>
+                <h2 style={{ fontSize: "clamp(18px, 4vw, 24px)", fontWeight: 800, color: theme.colors.textPrimary, marginBottom: "10px", letterSpacing: "-0.4px", lineHeight: 1.2, paddingRight: "40px", fontFamily: theme.fonts.heading }}>
                   {selectedItem.title}
                 </h2>
 
@@ -481,15 +496,13 @@ export default function SubCategory() {
                   dangerouslySetInnerHTML={{ __html: selectedItem.rawContent || selectedItem.excerpt || "" }}
                 />
 
-                {/* ── BOTTOM NAV ROW ── */}
+                {/* BOTTOM NAV ROW */}
                 <div style={{ marginTop: "24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  {/* Counter */}
                   <span style={{ color: theme.colors.textFaint, fontSize: "12px", fontFamily: theme.fonts.body }}>
                     {selectedIndex + 1} / {filtered.length}
                   </span>
 
                   <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                    {/* ← arrow */}
                     <button
                       className="modal-nav-btn"
                       onClick={() => goModal(-1)}
@@ -497,7 +510,6 @@ export default function SubCategory() {
                       style={{ width: "38px", height: "38px", borderRadius: "10px", background: hasPrev ? `${colors.accent}18` : "rgba(255,255,255,0.02)", color: hasPrev ? colors.accent : theme.colors.textFaint, border: `1px solid ${hasPrev ? colors.accent + "40" : "rgba(255,255,255,0.06)"}`, fontWeight: 700, fontSize: "18px", cursor: hasPrev ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: hasPrev ? `0 2px 12px ${colors.glow}` : "none" }}
                     >←</button>
 
-                    {/* → arrow */}
                     <button
                       className="modal-nav-btn"
                       onClick={() => goModal(1)}
@@ -508,8 +520,6 @@ export default function SubCategory() {
                 </div>
               </motion.div>
             </AnimatePresence>
-
-
           </motion.div>
         )}
       </AnimatePresence>

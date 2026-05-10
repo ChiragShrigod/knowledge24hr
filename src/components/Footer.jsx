@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { theme } from "../common/theme";
 
-// All accounts with their platform links
 const IG_ACCOUNTS = [
   { name: "GetTheGK",        handle: "@getthegk",        url: "https://instagram.com/getthegk" },
   { name: "Educating Facts", handle: "@educating.facts", url: "https://instagram.com/educating.facts" },
@@ -43,7 +42,6 @@ const FbSVG = () => (
   </svg>
 );
 
-// Reusable platform icon with hover dropdown
 function SocialDropdown({ accounts, color, icon, label }) {
   const [open, setOpen] = useState(false);
 
@@ -52,6 +50,7 @@ function SocialDropdown({ accounts, color, icon, label }) {
       style={{ position: "relative" }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
+      onClick={() => setOpen(o => !o)}
     >
       {/* Icon button */}
       <button
@@ -72,26 +71,29 @@ function SocialDropdown({ accounts, color, icon, label }) {
         {icon}
       </button>
 
-      {/* Dropdown */}
+      {/* Dropdown — fixed left-align so it never overflows off-screen */}
       {open && (
-        <div style={{
-          position: "absolute",
-          bottom: "calc(100% + 10px)",
-          left: "50%",
-          transform: "translateX(-50%)",
-          background: "rgba(10,14,26,0.98)",
-          border: `1px solid ${color}28`,
-          borderRadius: "13px",
-          padding: "6px",
-          minWidth: "200px",
-          zIndex: 200,
-          boxShadow: `0 -12px 40px rgba(0,0,0,0.5), 0 0 0 1px ${color}12`,
-        }}>
-          {/* Arrow pointing down */}
+        <div
+          onClick={e => e.stopPropagation()}
+          style={{
+            position: "absolute",
+            bottom: "calc(100% + 10px)",
+            left: "0",                  // left-aligned to button, no off-screen
+            transform: "none",
+            background: "rgba(10,14,26,0.98)",
+            border: `1px solid ${color}28`,
+            borderRadius: "13px",
+            padding: "6px",
+            minWidth: "200px",
+            maxWidth: "calc(100vw - 48px)",  // never exceed screen width
+            zIndex: 200,
+            boxShadow: `0 -12px 40px rgba(0,0,0,0.5), 0 0 0 1px ${color}12`,
+          }}>
+          {/* Arrow pointing down — aligned left */}
           <div style={{
             position: "absolute",
-            bottom: "-5px", left: "50%",
-            transform: "translateX(-50%) rotate(45deg)",
+            bottom: "-5px", left: "16px",
+            transform: "rotate(45deg)",
             width: "10px", height: "10px",
             background: "rgba(10,14,26,0.98)",
             border: `1px solid ${color}28`,
@@ -151,12 +153,12 @@ export default function Footer() {
         {/* TOP ROW */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
           gap: "2.5rem",
           marginBottom: "2.5rem",
         }}>
 
-          {/* Brand — no logo box, font matches header, social icons have dropdowns */}
+          {/* Brand */}
           <div>
             <Link to="/" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", marginBottom: "14px" }}>
               <span style={{
@@ -173,7 +175,7 @@ export default function Footer() {
               GK, Facts & Life Tips — curated, clean, and actually useful.
             </p>
 
-            {/* Social icons with dropdowns — opens upward */}
+            {/* Social icons with dropdowns */}
             <div style={{ display: "flex", gap: "10px", marginTop: "18px" }}>
               <SocialDropdown
                 label="Instagram"
