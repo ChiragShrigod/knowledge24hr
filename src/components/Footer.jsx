@@ -85,7 +85,6 @@ function SocialDropdown({ accounts, color, icon, label }) {
           padding: "6px",
           minWidth: "200px",
           zIndex: 200,
-          backdropFilter: "blur(24px)",
           boxShadow: `0 -12px 40px rgba(0,0,0,0.5), 0 0 0 1px ${color}12`,
         }}>
           {/* Arrow pointing down */}

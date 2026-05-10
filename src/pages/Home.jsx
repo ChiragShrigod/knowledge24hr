@@ -171,7 +171,7 @@ export default function Home() {
               >Explore Now →</a>
 
               <Link to="/facts/funFacts"
-                style={{ textDecoration:"none",padding:"14px 34px",borderRadius:"14px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.06)",color:theme.colors.textPrimary,backdropFilter:"blur(10px)",fontFamily:theme.fonts.display,transition:"all 0.2s ease" }}
+                style={{ textDecoration:"none",padding:"14px 34px",borderRadius:"14px",fontWeight:700,fontSize:"15px",background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.06)",color:theme.colors.textPrimary,fontFamily:theme.fonts.display,transition:"all 0.2s ease" }}
                 onMouseEnter={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.09)"; e.currentTarget.style.transform="translateY(-3px)"; }}
                 onMouseLeave={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.05)"; e.currentTarget.style.transform=""; }}
               >Browse Facts ⚡</Link>
@@ -189,7 +189,7 @@ export default function Home() {
             <div style={{ display:"flex",flexDirection:"column",gap:"12px" }}>
               {socials.map((s, i) => (
                 <div key={i}
-              style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 20px",borderRadius:"16px",background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.055)",backdropFilter:"blur(12px)",gap:"18px",opacity:mounted?1:0,transform:mounted?"translateY(0)":"translateY(30px)",transition:`all 0.7s cubic-bezier(0.23,1,0.32,1) ${0.45 + i * 0.12}s` }}                  onMouseEnter={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor="rgba(79,140,255,0.2)"; e.currentTarget.style.transform="translateX(5px)"; }}
+              style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 20px",borderRadius:"16px",background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.055)",gap:"18px",opacity:mounted?1:0,transform:mounted?"translateY(0)":"translateY(30px)",transition:`all 0.7s cubic-bezier(0.23,1,0.32,1) ${0.45 + i * 0.12}s` }}                  onMouseEnter={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor="rgba(79,140,255,0.2)"; e.currentTarget.style.transform="translateX(5px)"; }}
                   onMouseLeave={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.03)"; e.currentTarget.style.borderColor="rgba(255,255,255,0.055)"; e.currentTarget.style.transform=""; }}
                 >
                   {/* Name + handle stacked */}
@@ -255,7 +255,7 @@ export default function Home() {
           <div style={{ display:"flex",gap:"28px",flexWrap:"wrap",justifyContent:"center" }}>
             {CATEGORIES.map((cat,i)=>(
               <MagneticCard key={cat.id} onClick={()=>navigate(def[cat.route]||cat.route)}
-                style={{ flex:"1 1 310px",maxWidth:"370px",background:theme.colors.surfaceCard,borderRadius:"22px",padding:"2.2rem",border:"1px solid rgba(255,255,255,0.07)",boxShadow:theme.shadows.card,position:"relative",overflow:"hidden",animation:`fadeUpH 0.7s ease ${0.1+i*0.15}s both`,backdropFilter:"blur(20px)" }}>
+                style={{ flex:"1 1 310px",maxWidth:"370px",background:theme.colors.surfaceCard,borderRadius:"22px",padding:"2.2rem",border:"1px solid rgba(255,255,255,0.07)",boxShadow:theme.shadows.card,position:"relative",overflow:"hidden",animation:`fadeUpH 0.7s ease ${0.1+i*0.15}s both`}}>
                 <div style={{ position:"absolute",inset:0,background:cat.gradient,opacity:0.07,pointerEvents:"none" }} />
                 <div style={{ position:"absolute",top:0,left:"18%",right:"18%",height:"2px",background:`linear-gradient(90deg,transparent,${cat.accent},transparent)`,borderRadius:"999px",opacity:0.75 }} />
                 <div style={{ position:"relative",display:"inline-flex",marginBottom:"1.4rem" }}>

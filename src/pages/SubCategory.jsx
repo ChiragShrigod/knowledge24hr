@@ -245,14 +245,14 @@ export default function SubCategory() {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(255,255,255,0.04)", border: `1px solid ${search ? colors.accent + "55" : "rgba(255,255,255,0.09)"}`, borderRadius: "12px", padding: "10px 16px", transition: "border 0.25s ease, box-shadow 0.25s ease", boxShadow: search ? `0 0 20px ${colors.glow}` : "none", backdropFilter: "blur(12px)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(255,255,255,0.04)", border: `1px solid ${search ? colors.accent + "55" : "rgba(255,255,255,0.09)"}`, borderRadius: "12px", padding: "10px 16px", transition: "border 0.25s ease, box-shadow 0.25s ease", boxShadow: search ? `0 0 20px ${colors.glow}` : "none" }}>
               <span style={{ fontSize: "15px", opacity: 0.5 }}>🔍</span>
               <input value={search} onChange={e => setSearch(e.target.value)} placeholder={`Search ${sub}...`}
                 style={{ background: "none", border: "none", outline: "none", color: theme.colors.textPrimary, fontSize: "14px", fontWeight: 500, fontFamily: theme.fonts.body, width: "160px", caretColor: colors.accent }} />
               {search && <span onClick={() => setSearch("")} style={{ color: theme.colors.textMuted, cursor: "pointer", fontSize: "13px", fontWeight: 700 }}>✕</span>}
             </div>
 
-            <div style={{ display: "flex", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: "12px", overflow: "hidden", backdropFilter: "blur(12px)" }}>
+            <div style={{ display: "flex", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: "12px", overflow: "hidden" }}>
               {[{ mode: "grid", Icon: GridIcon }, { mode: "table", Icon: TableIcon }].map(({ mode, Icon }) => {
                 const isOn = viewMode === mode;
                 return (
@@ -286,7 +286,7 @@ export default function SubCategory() {
       {loading && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "24px" }}>
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", padding: "26px 28px", height: "200px", border: "1px solid rgba(255,255,255,0.07)", animation: `fadeUpCard 0.52s ease ${i * 0.05}s both`, backdropFilter: "blur(18px)", overflow: "hidden", position: "relative" }}>
+            <div key={i} style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", padding: "26px 28px", height: "200px", border: "1px solid rgba(255,255,255,0.07)", animation: `fadeUpCard 0.52s ease ${i * 0.05}s both`, overflow: "hidden", position: "relative" }}>
               <div style={{ position: "absolute", top: 0, left: "-100%", width: "200%", height: "100%", background: `linear-gradient(90deg, transparent 0%, ${colors.accent}08 50%, transparent 100%)`, animation: "shimmer 1.5s infinite" }} />
             </div>
           ))}
@@ -324,7 +324,7 @@ export default function SubCategory() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "24px" }}>
             {paginated.map((post, index) => (
               <div key={post.id} className="sc-card" onClick={() => { setModalDir(0); setSelectedItem(post); }}
-                style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", padding: "26px 28px", cursor: "pointer", border: "1px solid rgba(255,255,255,0.07)", boxShadow: "0 6px 30px rgba(0,0,0,0.35)", transition: "transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease, border-color 0.3s ease", position: "relative", overflow: "hidden", backdropFilter: "blur(18px)", animation: `fadeUpCard 0.52s ease ${Math.min(index * 0.04, 0.48)}s both`, willChange: "transform" }}
+                style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", padding: "26px 28px", cursor: "pointer", border: "1px solid rgba(255,255,255,0.07)", boxShadow: "0 6px 30px rgba(0,0,0,0.35)", transition: "transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease, border-color 0.3s ease", position: "relative", overflow: "hidden", animation: `fadeUpCard 0.52s ease ${Math.min(index * 0.04, 0.48)}s both`, willChange: "transform" }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-8px)"; e.currentTarget.style.boxShadow = `0 20px 50px ${colors.glow}, 0 0 0 1px ${colors.accent}22`; e.currentTarget.style.borderColor = `${colors.accent}30`; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 6px 30px rgba(0,0,0,0.35)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; }}
               >
@@ -372,7 +372,7 @@ export default function SubCategory() {
       {/* ══ TABLE ══ */}
       {!loading && !error && filtered.length > 0 && viewMode === "table" && (
         <>
-          <div style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.07)", overflow: "hidden", backdropFilter: "blur(18px)" }}>
+          <div style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.07)", overflow: "hidden"}}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: theme.fonts.body }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
@@ -427,7 +427,7 @@ export default function SubCategory() {
             onClick={() => setSelectedItem(null)}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
-            style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", background: "rgba(5,8,16,0.88)", backdropFilter: "blur(14px)" }}
+            style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", background: "rgba(5,8,16,0.88)"}}
           >
 
 

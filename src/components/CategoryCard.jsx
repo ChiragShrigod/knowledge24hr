@@ -77,7 +77,6 @@ export default function CategoryCard({ id, title, description, icon, color, rout
           boxShadow: theme.shadows.card,
           transition: "transform 0.28s cubic-bezier(0.23,1,0.32,1), box-shadow 0.28s ease",
           willChange: "transform",
-          backdropFilter: "blur(20px)",
           fontFamily: theme.fonts.legacyHeading,
         }}
       >

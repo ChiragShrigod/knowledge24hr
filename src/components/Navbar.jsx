@@ -38,7 +38,6 @@ export default function Navbar() {
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
       transition: "all 0.4s ease",
       background: scrolled ? "rgba(11,15,25,0.92)" : "rgba(11,15,25,0.65)",
-      backdropFilter: "blur(18px)",
       borderBottom: "1px solid rgba(255,255,255,0.06)",
       boxShadow: scrolled ? "0 0 40px rgba(79,140,255,0.12)" : "none",
     }}>
