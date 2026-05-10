@@ -1,12 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { theme } from "../common/theme";
 import { useBloggerPosts } from "../hooks/useBloggerPosts";
 
 const ITEMS_PER_PAGE = 9;
 
-/* ── Tab config ── */
 const TAB_CONFIG = {
   gk: [
     { name: "Full Forms", sub: "fullforms",      route: "/gk/fullForms" },
@@ -25,7 +24,6 @@ const TAB_CONFIG = {
   ],
 };
 
-/* ── sub param → Blogger label ── */
 const LABEL_MAP = {
   fullforms:       "full-forms",
   quiz:            "quiz",
@@ -38,14 +36,12 @@ const LABEL_MAP = {
   selfimprovement: "self-improvement",
 };
 
-/* ── Accent colors ── */
 const CAT_ACCENT = {
   gk:    theme.categoryThemes.gk,
   facts: theme.categoryThemes.facts,
   tips:  theme.categoryThemes.tips,
 };
 
-/* ── Highlight matching text ── */
 function Highlight({ text = "", query = "" }) {
   if (!query) return <>{text}</>;
   const idx = text.toLowerCase().indexOf(query.toLowerCase());
@@ -61,7 +57,6 @@ function Highlight({ text = "", query = "" }) {
   );
 }
 
-/* ── Toggle icons ── */
 function GridIcon({ active, color }) {
   const c = active ? color : "#6B7280";
   return (
@@ -84,7 +79,6 @@ function TableIcon({ active, color }) {
   );
 }
 
-/* ── Format date ── */
 function fmtDate(iso) {
   if (!iso) return "";
   return new Date(iso).toLocaleDateString("en-IN", {
@@ -94,7 +88,6 @@ function fmtDate(iso) {
 
 const FALLBACK_IMG = "https://placehold.co/600x300/1a2235/4F8CFF?text=Knowledge24hr";
 
-/* ── 2-line clamp style (reused in grid + table) ── */
 const excerptClampStyle = {
   display: "-webkit-box",
   WebkitLineClamp: 2,
@@ -114,26 +107,26 @@ export default function SubCategory() {
   const [viewMode,     setViewMode]     = useState("grid");
   const [currentPage,  setCurrentPage]  = useState(1);
 
-  /* ── Resolve Blogger label from sub param ── */
-  const bloggerLabel = LABEL_MAP[subLower] || subLower;
+  // ── MODAL NAVIGATION STATE ──
+  const [modalDir, setModalDir] = useState(0); // -1 = prev, 1 = next
+  const touchStartX = useRef(null);
 
-  /* ── Fetch from Blogger ── */
+  const bloggerLabel = LABEL_MAP[subLower] || subLower;
   const { posts, loading, error } = useBloggerPosts(bloggerLabel);
 
-useEffect(() => {
-  setSearch("");
-  setSelectedItem(null);
-  setCurrentPage(1);
-}, [cat, sub]);
+  useEffect(() => {
+    setSearch("");
+    setSelectedItem(null);
+    setCurrentPage(1);
+  }, [cat, sub]);
 
-useEffect(() => { 
-  setCurrentPage(1); 
-}, [search]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
 
-const tabs = TAB_CONFIG[cat] || [];
+  const tabs   = TAB_CONFIG[cat] || [];
   const colors = CAT_ACCENT[cat] || CAT_ACCENT.gk;
 
-  /* ── Filter by search ── */
   const filtered = posts.filter((post) => {
     if (!search) return true;
     const q = search.toLowerCase();
@@ -152,14 +145,41 @@ const tabs = TAB_CONFIG[cat] || [];
     cat === "facts" ? "Amazing Facts"     :
     cat === "tips"  ? "Helpful Tips"      : category;
 
-  /* ── Tab switching: replace:true is correct here.
-       It replaces the current history entry so pressing Back from
-       /gk/quiz doesn't cycle through /gk/fullForms → /gk/extremes.
-       The category redirect in AppRoutes no longer uses replace, so
-       the home entry stays safely behind in the stack. ── */
   const goTab = useCallback((route) => navigate(route, { replace: true }), [navigate]);
 
-  /* ── Pagination ── */
+  // ── MODAL NAVIGATION HELPERS ──
+  const selectedIndex = selectedItem ? filtered.findIndex(p => p.id === selectedItem.id) : -1;
+  const hasPrev = selectedIndex > 0;
+  const hasNext = selectedIndex < filtered.length - 1;
+
+  const goModal = useCallback((dir) => {
+    const next = selectedIndex + dir;
+    if (next < 0 || next >= filtered.length) return;
+    setModalDir(dir);
+    setSelectedItem(filtered[next]);
+  }, [selectedIndex, filtered]);
+
+  // ── KEYBOARD NAVIGATION ──
+  useEffect(() => {
+    if (!selectedItem) return;
+    const handler = (e) => {
+      if (e.key === "ArrowLeft")  goModal(-1);
+      if (e.key === "ArrowRight") goModal(1);
+      if (e.key === "Escape")     setSelectedItem(null);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [selectedItem, goModal]);
+
+  // ── SWIPE HANDLERS ──
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const onTouchEnd   = (e) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) goModal(diff > 0 ? 1 : -1);
+    touchStartX.current = null;
+  };
+
   function Pagination() {
     if (totalPages <= 1) return null;
     const pages = [];
@@ -193,6 +213,9 @@ const tabs = TAB_CONFIG[cat] || [];
         .sc-card:hover .sc-arrow { transform:translateX(5px) !important; }
         .sc-card:hover .sc-glow  { opacity:1 !important; }
         .sc-tr:hover { background:rgba(255,255,255,0.04) !important; }
+        .modal-nav-btn { transition: all 0.2s ease !important; }
+        .modal-nav-btn:hover:not(:disabled) { transform: scale(1.12) !important; }
+        .modal-nav-btn:active:not(:disabled) { transform: scale(0.94) !important; }
       `}</style>
 
       {/* ══ HEADER ══ */}
@@ -221,7 +244,6 @@ const tabs = TAB_CONFIG[cat] || [];
             </p>
           </div>
 
-          {/* Controls */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(255,255,255,0.04)", border: `1px solid ${search ? colors.accent + "55" : "rgba(255,255,255,0.09)"}`, borderRadius: "12px", padding: "10px 16px", transition: "border 0.25s ease, box-shadow 0.25s ease", boxShadow: search ? `0 0 20px ${colors.glow}` : "none", backdropFilter: "blur(12px)" }}>
               <span style={{ fontSize: "15px", opacity: 0.5 }}>🔍</span>
@@ -301,7 +323,7 @@ const tabs = TAB_CONFIG[cat] || [];
         <>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "24px" }}>
             {paginated.map((post, index) => (
-              <div key={post.id} className="sc-card" onClick={() => setSelectedItem(post)}
+              <div key={post.id} className="sc-card" onClick={() => { setModalDir(0); setSelectedItem(post); }}
                 style={{ background: "rgba(18,24,38,0.82)", borderRadius: "20px", padding: "26px 28px", cursor: "pointer", border: "1px solid rgba(255,255,255,0.07)", boxShadow: "0 6px 30px rgba(0,0,0,0.35)", transition: "transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease, border-color 0.3s ease", position: "relative", overflow: "hidden", backdropFilter: "blur(18px)", animation: `fadeUpCard 0.52s ease ${Math.min(index * 0.04, 0.48)}s both`, willChange: "transform" }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-8px)"; e.currentTarget.style.boxShadow = `0 20px 50px ${colors.glow}, 0 0 0 1px ${colors.accent}22`; e.currentTarget.style.borderColor = `${colors.accent}30`; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 6px 30px rgba(0,0,0,0.35)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; }}
@@ -309,7 +331,6 @@ const tabs = TAB_CONFIG[cat] || [];
                 <div className="sc-glow" style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 50% 0%, ${colors.accent}12 0%, transparent 70%)`, opacity: 0, transition: "opacity 0.3s ease", pointerEvents: "none" }} />
                 <div style={{ position: "absolute", top: 0, left: "20%", right: "20%", height: "2px", background: `linear-gradient(90deg, transparent, ${colors.accent}80, transparent)`, borderRadius: "999px" }} />
 
-                {/* Thumbnail */}
                 {post.thumbnail && (
                   <div style={{ width: "calc(100% + 56px)", marginLeft: "-28px", marginTop: "-26px", marginBottom: "20px", height: "160px", overflow: "hidden", borderRadius: "20px 20px 0 0" }}>
                     <img src={post.thumbnail} alt={post.title} onError={e => { e.target.src = FALLBACK_IMG; }}
@@ -317,7 +338,6 @@ const tabs = TAB_CONFIG[cat] || [];
                   </div>
                 )}
 
-                {/* Labels */}
                 {post.labels.length > 0 && (
                   <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "10px" }}>
                     {post.labels.map(lbl => (
@@ -330,7 +350,6 @@ const tabs = TAB_CONFIG[cat] || [];
                   <Highlight text={post.title} query={search} />
                 </h2>
 
-                {/* ── FIXED: CSS 2-line clamp (no JS slice) ── */}
                 {post.excerpt && (
                   <p style={{ color: theme.colors.textSecondary, fontSize: "14px", lineHeight: 1.65, marginTop: "4px", fontFamily: theme.fonts.body, ...excerptClampStyle }}>
                     <Highlight text={post.excerpt} query={search} />
@@ -364,7 +383,7 @@ const tabs = TAB_CONFIG[cat] || [];
               </thead>
               <tbody>
                 {paginated.map((post, index) => (
-                  <tr key={post.id} className="sc-tr" onClick={() => setSelectedItem(post)}
+                  <tr key={post.id} className="sc-tr" onClick={() => { setModalDir(0); setSelectedItem(post); }}
                     style={{ borderBottom: index < paginated.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none", cursor: "pointer", transition: "background 0.18s ease" }}
                   >
                     <td style={{ padding: "14px 16px", minWidth: "200px" }}>
@@ -380,7 +399,6 @@ const tabs = TAB_CONFIG[cat] || [];
                       )}
                     </td>
                     <td style={{ padding: "14px 16px", maxWidth: "320px" }}>
-                      {/* ── FIXED: CSS 2-line clamp in table preview too ── */}
                       <span style={{ color: theme.colors.textMuted, fontSize: "13px", lineHeight: 1.5, fontFamily: theme.fonts.body, ...excerptClampStyle }}>
                         <Highlight text={post.excerpt || ""} query={search} />
                       </span>
@@ -407,64 +425,91 @@ const tabs = TAB_CONFIG[cat] || [];
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={() => setSelectedItem(null)}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
             style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", background: "rgba(5,8,16,0.78)", backdropFilter: "blur(14px)" }}
           >
-            <motion.div
-              initial={{ scale: 0.88, opacity: 0, y: 40 }}
-              animate={{ scale: 1,    opacity: 1, y: 0 }}
-              exit={{   scale: 0.9,  opacity: 0, y: 20 }}
-              transition={{ type: "spring", stiffness: 300, damping: 28 }}
-              onClick={e => e.stopPropagation()}
-              style={{ background: theme.colors.surfaceModal, borderRadius: "24px", padding: "2.4rem", maxWidth: "640px", width: "100%", border: `1px solid ${colors.accent}30`, boxShadow: `${theme.shadows.cardModal}, 0 0 60px ${colors.glow}`, backdropFilter: "blur(30px)", position: "relative", fontFamily: theme.fonts.body, maxHeight: "85vh", overflowY: "auto" }}
-            >
-              {/* Close btn */}
-              <button onClick={() => setSelectedItem(null)}
-                style={{ position: "absolute", top: "18px", right: "20px", color: theme.colors.textMuted, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: "8px", width: "32px", height: "32px", fontSize: "16px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s ease" }}
-                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.10)"; e.currentTarget.style.color = theme.colors.textPrimary; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.color = theme.colors.textMuted; }}
-              >✕</button>
 
-              <div style={{ position: "absolute", top: 0, left: "20%", right: "20%", height: "2px", background: `linear-gradient(90deg, transparent, ${colors.accent}, transparent)`, borderRadius: "999px" }} />
 
-              {/* Thumbnail in modal */}
-              {selectedItem.thumbnail && (
-                <div style={{ width: "calc(100% + 4.8rem)", marginLeft: "-2.4rem", marginTop: "-2.4rem", marginBottom: "1.6rem", height: "200px", overflow: "hidden", borderRadius: "24px 24px 0 0" }}>
-                  <img src={selectedItem.thumbnail} alt={selectedItem.title} onError={e => { e.target.src = FALLBACK_IMG; }}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                </div>
-              )}
-
-              {/* Labels */}
-              {selectedItem.labels?.length > 0 && (
-                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "12px" }}>
-                  {selectedItem.labels.map(lbl => (
-                    <span key={lbl} style={{ background: `${colors.accent}18`, color: colors.accent, fontSize: "12px", fontWeight: 700, padding: "4px 12px", borderRadius: "999px", border: `1px solid ${colors.accent}30`, fontFamily: theme.fonts.heading, textTransform: "uppercase", letterSpacing: "0.5px" }}>{lbl}</span>
-                  ))}
-                </div>
-              )}
-
-              <h2 style={{ fontSize: "24px", fontWeight: 800, color: theme.colors.textPrimary, marginBottom: "10px", letterSpacing: "-0.4px", lineHeight: 1.2, paddingRight: "40px", fontFamily: theme.fonts.heading }}>
-                {selectedItem.title}
-              </h2>
-
-              <span style={{ color: theme.colors.textFaint, fontSize: "12px", fontFamily: theme.fonts.body }}>{fmtDate(selectedItem.published)}</span>
-
-              <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "16px 0" }} />
-
-              {/* Full post HTML content — no clamp in modal */}
-              <div
-                style={{ color: theme.colors.textSecondary, lineHeight: 1.75, fontSize: "15px", fontFamily: theme.fonts.body }}
-                dangerouslySetInnerHTML={{ __html: selectedItem.rawContent || selectedItem.excerpt || "" }}
-              />
-
-              <div style={{ marginTop: "24px", display: "flex", justifyContent: "flex-end" }}>
+            {/* ── MODAL CARD ── */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedItem.id}
+                initial={{ opacity: 0, x: modalDir === 0 ? 0 : modalDir * 80, scale: modalDir === 0 ? 0.88 : 0.96 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: modalDir === 0 ? 0 : -modalDir * 80, scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 500, damping: 36 }}
+                onClick={e => e.stopPropagation()}
+                style={{ background: theme.colors.surfaceModal, borderRadius: "24px", padding: "2.4rem", maxWidth: "640px", width: "100%", border: `1px solid ${colors.accent}30`, boxShadow: `${theme.shadows.cardModal}, 0 0 60px ${colors.glow}`, backdropFilter: "blur(30px)", position: "relative", fontFamily: theme.fonts.body, maxHeight: "85vh", overflowY: "auto" }}
+              >
+                {/* Close btn */}
                 <button onClick={() => setSelectedItem(null)}
-                  style={{ padding: "10px 24px", borderRadius: "10px", background: colors.gradient, color: theme.colors.white, border: "none", fontWeight: 700, fontSize: "14px", cursor: "pointer", fontFamily: theme.fonts.body, boxShadow: `0 6px 20px ${colors.glow}`, transition: "transform 0.2s ease" }}
-                  onMouseEnter={e => e.currentTarget.style.transform = "scale(1.04)"}
-                  onMouseLeave={e => e.currentTarget.style.transform = ""}
-                >Got it ✓</button>
-              </div>
-            </motion.div>
+                  style={{ position: "absolute", top: "18px", right: "20px", color: theme.colors.textMuted, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: "8px", width: "32px", height: "32px", fontSize: "16px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s ease" }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.10)"; e.currentTarget.style.color = theme.colors.textPrimary; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; e.currentTarget.style.color = theme.colors.textMuted; }}
+                >✕</button>
+
+                <div style={{ position: "absolute", top: 0, left: "20%", right: "20%", height: "2px", background: `linear-gradient(90deg, transparent, ${colors.accent}, transparent)`, borderRadius: "999px" }} />
+
+                {/* Thumbnail */}
+                {selectedItem.thumbnail && (
+                  <div style={{ width: "calc(100% + 4.8rem)", marginLeft: "-2.4rem", marginTop: "-2.4rem", marginBottom: "1.6rem", height: "200px", overflow: "hidden", borderRadius: "24px 24px 0 0" }}>
+                    <img src={selectedItem.thumbnail} alt={selectedItem.title} onError={e => { e.target.src = FALLBACK_IMG; }}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  </div>
+                )}
+
+                {/* Labels */}
+                {selectedItem.labels?.length > 0 && (
+                  <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "12px" }}>
+                    {selectedItem.labels.map(lbl => (
+                      <span key={lbl} style={{ background: `${colors.accent}18`, color: colors.accent, fontSize: "12px", fontWeight: 700, padding: "4px 12px", borderRadius: "999px", border: `1px solid ${colors.accent}30`, fontFamily: theme.fonts.heading, textTransform: "uppercase", letterSpacing: "0.5px" }}>{lbl}</span>
+                    ))}
+                  </div>
+                )}
+
+                <h2 style={{ fontSize: "24px", fontWeight: 800, color: theme.colors.textPrimary, marginBottom: "10px", letterSpacing: "-0.4px", lineHeight: 1.2, paddingRight: "40px", fontFamily: theme.fonts.heading }}>
+                  {selectedItem.title}
+                </h2>
+
+                <span style={{ color: theme.colors.textFaint, fontSize: "12px", fontFamily: theme.fonts.body }}>{fmtDate(selectedItem.published)}</span>
+
+                <div style={{ height: "1px", background: "rgba(255,255,255,0.06)", margin: "16px 0" }} />
+
+                <div
+                  style={{ color: theme.colors.textSecondary, lineHeight: 1.75, fontSize: "15px", fontFamily: theme.fonts.body }}
+                  dangerouslySetInnerHTML={{ __html: selectedItem.rawContent || selectedItem.excerpt || "" }}
+                />
+
+                {/* ── BOTTOM NAV ROW ── */}
+                <div style={{ marginTop: "24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  {/* Counter */}
+                  <span style={{ color: theme.colors.textFaint, fontSize: "12px", fontFamily: theme.fonts.body }}>
+                    {selectedIndex + 1} / {filtered.length}
+                  </span>
+
+                  <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                    {/* ← arrow */}
+                    <button
+                      className="modal-nav-btn"
+                      onClick={() => goModal(-1)}
+                      disabled={!hasPrev}
+                      style={{ width: "38px", height: "38px", borderRadius: "10px", background: hasPrev ? `${colors.accent}18` : "rgba(255,255,255,0.02)", color: hasPrev ? colors.accent : theme.colors.textFaint, border: `1px solid ${hasPrev ? colors.accent + "40" : "rgba(255,255,255,0.06)"}`, fontWeight: 700, fontSize: "18px", cursor: hasPrev ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: hasPrev ? `0 2px 12px ${colors.glow}` : "none" }}
+                    >←</button>
+
+                    {/* → arrow */}
+                    <button
+                      className="modal-nav-btn"
+                      onClick={() => goModal(1)}
+                      disabled={!hasNext}
+                      style={{ width: "38px", height: "38px", borderRadius: "10px", background: hasNext ? `${colors.accent}18` : "rgba(255,255,255,0.02)", color: hasNext ? colors.accent : theme.colors.textFaint, border: `1px solid ${hasNext ? colors.accent + "40" : "rgba(255,255,255,0.06)"}`, fontWeight: 700, fontSize: "18px", cursor: hasNext ? "pointer" : "not-allowed", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: hasNext ? `0 2px 12px ${colors.glow}` : "none" }}
+                    >→</button>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+
           </motion.div>
         )}
       </AnimatePresence>

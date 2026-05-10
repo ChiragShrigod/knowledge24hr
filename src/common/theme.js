@@ -102,12 +102,12 @@ export const theme = {
 
   categoryThemes: {
     gk: {
-      accent: "#4F8CFF",
-      glow: "rgba(79,140,255,0.30)",
-      glowStrong: "rgba(79,140,255,0.35)",
-      gradient: "linear-gradient(135deg,#1E3A8A,#2563EB)",
+      accent: "#EF4444",
+      glow: "rgba(239,68,68,0.30)",
+      glowStrong: "rgba(239,68,68,0.38)",
+      gradient: "linear-gradient(135deg,#7F1D1D,#EF4444)",
       textColor: "#FFFFFF",
-    },
+    },   
     facts: {
       accent: "#FFD600",
       glow: "rgba(255,214,0,0.30)",
@@ -123,9 +123,9 @@ export const theme = {
       textColor: "#FFFFFF",
     },
     blue: {
-      accent: "#4F8CFF",
-      glow: "rgba(79,140,255,0.35)",
-      gradient: "linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%)",
+      accent: "#EF4444",
+      glow: "rgba(239,68,68,0.35)",
+      gradient: "linear-gradient(135deg,#7F1D1D,#EF4444)",
       textColor: "#FFFFFF",
     },
     yellow: {
@@ -143,7 +143,7 @@ export const theme = {
   },
 
   labelAccents: {
-    gk: "#4F8CFF",
+    gk: "#EF4444",
     "fun-facts": "#FFD600",
     "science-facts": "#A78BFA",
     "random-facts": "#FFD600",
@@ -151,7 +151,7 @@ export const theme = {
     motivation: "#F97316",
     "self-improvement": "#22D3EE",
     extremes: "#F87171",
-    "full-forms": "#4F8CFF",
+    "full-forms": "#EF4444",
     quiz: "#F472B6",
   },
 
