@@ -227,18 +227,6 @@ export default function SubCategory() {
 
       {/* ══ HEADER ══ */}
       <div style={{ marginBottom: "2.6rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
-          <span onClick={() => navigate("/")}
-            style={{ color: theme.colors.textMuted, fontSize: "13px", cursor: "pointer", fontWeight: 600, fontFamily: theme.fonts.body, transition: "color 0.2s" }}
-            onMouseEnter={e => e.currentTarget.style.color = colors.accent}
-            onMouseLeave={e => e.currentTarget.style.color = theme.colors.textMuted}
-          >Home</span>
-          <span style={{ color: theme.colors.textFaint }}>›</span>
-          <span style={{ color: colors.accent, fontSize: "13px", fontWeight: 700, fontFamily: theme.fonts.body }}>{categoryLabel}</span>
-          <span style={{ color: theme.colors.textFaint }}>›</span>
-          <span style={{ color: theme.colors.textSecondary, fontSize: "13px", fontWeight: 600, fontFamily: theme.fonts.body }}>{sub}</span>
-        </div>
-
         {/* ── HEADER ROW (title + search) — stacks on mobile ── */}
         <div className="sc-header-row" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
           <div>

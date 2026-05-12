@@ -12,13 +12,9 @@ export default function Contact() {
         </p>
 
         <div style={{ display:"flex", flexDirection:"column", gap:"16px", alignItems:"center" }}>
-          <a href="mailto:knowledge24hr@gmail.com"
+          <a href="mailto:knowledge24hrofficial@gmail.com"
             style={{ background:theme.gradients.cardBlue, color:theme.colors.white, textDecoration:"none", padding:"13px 32px", borderRadius:"12px", fontWeight:700, fontSize:"15px", fontFamily:theme.fonts.display }}>
             ✉️ Email Us
-          </a>
-          <a href="https://instagram.com/YOUR_PAGE" target="_blank" rel="noreferrer"
-            style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.12)", color:theme.colors.textPrimary, textDecoration:"none", padding:"13px 32px", borderRadius:"12px", fontWeight:700, fontSize:"15px", fontFamily:theme.fonts.display }}>
-            📸 Instagram
           </a>
         </div>
       </div>
