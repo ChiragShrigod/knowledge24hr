@@ -30,17 +30,17 @@ const socials = [
   {
     name: "GetTheGK",
     instagram: { handle: "@getthegk",        url: "https://instagram.com/getthegk" },
-    facebook:  { handle: "@getthegk",        url: "https://facebook.com/getthegk" },
+    facebook:  { handle: "@getthegk",        url: "https://www.facebook.com/share/1H6C7pdzGt/" },
   },
   {
     name: "Educating Facts",
     instagram: { handle: "@educating.facts", url: "https://instagram.com/educating.facts" },
-    facebook:  { handle: "@educating.facts", url: "https://facebook.com/educating.facts" },
+    facebook:  { handle: "@educating.facts", url: "https://www.facebook.com/share/18TUXMBJa6/" },
   },
   {
     name: "Freaky Knowledge",
     instagram: { handle: "@freaky.knowledge", url: "https://instagram.com/freaky.knowledge" },
-    facebook:  { handle: "@freakyknowledge",  url: "https://facebook.com/freakyknowledge" },
+    facebook:  { handle: "@freakyknowledge",  url: "https://www.facebook.com/share/1B7vaRPd6M/" },
   },
   {
     name: "Knowledgepedia",
@@ -95,7 +95,6 @@ export default function Home() {
 
   useEffect(() => { const t = setTimeout(() => setMounted(true), 60); return () => clearTimeout(t); }, []);
 
-  // Hide scroll indicator when user scrolls, show again at top
   useEffect(() => {
     const onScroll = () => setAtTop(window.scrollY < 60);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -178,7 +177,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* RIGHT — clean social account rows, no platform buttons */}
+          {/* RIGHT */}
           <div className="hero-right" style={{ position:"relative",paddingLeft:"10px",maxWidth:"550px",width:"100%"}}>
             <div style={{ marginBottom:"18px", ...anim(0.32) }}>
               <span style={{ color:theme.colors.textMuted,fontSize:"11px",letterSpacing:"3px",fontWeight:800,textTransform:"uppercase",fontFamily:theme.fonts.body }}>
@@ -189,10 +188,10 @@ export default function Home() {
             <div style={{ display:"flex",flexDirection:"column",gap:"12px" }}>
               {socials.map((s, i) => (
                 <div key={i}
-              style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 20px",borderRadius:"16px",background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.055)",gap:"18px",opacity:mounted?1:0,transform:mounted?"translateY(0)":"translateY(30px)",transition:`all 0.7s cubic-bezier(0.23,1,0.32,1) ${0.45 + i * 0.12}s` }}                  onMouseEnter={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor="rgba(79,140,255,0.2)"; e.currentTarget.style.transform="translateX(5px)"; }}
+                  style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 20px",borderRadius:"16px",background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.055)",gap:"18px",opacity:mounted?1:0,transform:mounted?"translateY(0)":"translateY(30px)",transition:`all 0.7s cubic-bezier(0.23,1,0.32,1) ${0.45 + i * 0.12}s` }}
+                  onMouseEnter={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.06)"; e.currentTarget.style.borderColor="rgba(79,140,255,0.2)"; e.currentTarget.style.transform="translateX(5px)"; }}
                   onMouseLeave={e=>{ e.currentTarget.style.background="rgba(255,255,255,0.03)"; e.currentTarget.style.borderColor="rgba(255,255,255,0.055)"; e.currentTarget.style.transform=""; }}
                 >
-                  {/* Name + handle stacked */}
                   <div style={{ minWidth:0 }}>
                     <div style={{ color:theme.colors.textPrimary,fontWeight:700,fontSize:"15px",fontFamily:theme.fonts.display,whiteSpace:"nowrap",marginBottom:"2px" }}>
                       {s.name}
@@ -202,7 +201,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Platform icons on the right */}
                   <div style={{ display:"flex",gap:"6px",flexShrink:0 }}>
                     {s.instagram && (
                       <a href={s.instagram.url} target="_blank" rel="noopener noreferrer"
@@ -229,15 +227,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Scroll indicator — disappears on scroll, returns at top */}
-        <div style={{
-          position:"absolute",bottom:"28px",left:"50%",
-          transform:"translateX(-50%)",
-          display:"flex",flexDirection:"column",alignItems:"center",gap:"6px",
-          opacity: mounted && atTop ? 0.45 : 0,
-          transition:"opacity 0.5s ease",
-          zIndex:3,pointerEvents:"none",
-        }}>
+        {/* Scroll indicator */}
+        <div style={{ position:"absolute",bottom:"28px",left:"50%",transform:"translateX(-50%)",display:"flex",flexDirection:"column",alignItems:"center",gap:"6px",opacity: mounted && atTop ? 0.45 : 0,transition:"opacity 0.5s ease",zIndex:3,pointerEvents:"none" }}>
           <span style={{ fontSize:"10px",color:theme.colors.textMuted,letterSpacing:"2.5px",textTransform:"uppercase",fontFamily:theme.fonts.body }}>scroll</span>
           <div style={{ width:"1px",height:"40px",background:`linear-gradient(to bottom,${theme.colors.primary},transparent)` }} />
         </div>

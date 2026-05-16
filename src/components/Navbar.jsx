@@ -59,8 +59,13 @@ export default function Navbar() {
           padding: "0 clamp(0.75rem, 2vw, 2rem) 0 clamp(0.5rem, 1.5vw, 1rem)",
         }}>
 
-          {/* BRAND */}
-          <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", flexShrink: 0 }}>
+          {/* BRAND — logo + text */}
+          <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+            <img
+              src="/logo.png"
+              alt="Knowledge24hr"
+              style={{ height: "32px", width: "32px", borderRadius: "8px", objectFit: "cover" }}
+            />
             <span style={{
               fontWeight: 800,
               fontSize: "clamp(16px, 4vw, 22px)",
@@ -93,18 +98,8 @@ export default function Navbar() {
                     transition: "all 0.2s ease",
                     whiteSpace: "nowrap",
                   }}
-                  onMouseEnter={e => {
-                    if (!active) {
-                      e.currentTarget.style.color = "#E6EAF2";
-                      e.currentTarget.style.background = "rgba(255,255,255,0.06)";
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (!active) {
-                      e.currentTarget.style.color = theme.colors.textSecondary;
-                      e.currentTarget.style.background = "transparent";
-                    }
-                  }}
+                  onMouseEnter={e => { if (!active) { e.currentTarget.style.color = "#E6EAF2"; e.currentTarget.style.background = "rgba(255,255,255,0.06)"; } }}
+                  onMouseLeave={e => { if (!active) { e.currentTarget.style.color = theme.colors.textSecondary; e.currentTarget.style.background = "transparent"; } }}
                 >
                   {link.label}
                 </Link>
@@ -124,7 +119,7 @@ export default function Navbar() {
                 background: theme.gradients.cardYellow,
                 color: "#0B0F19",
                 boxShadow: theme.shadows.glowYellow,
-                transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                transition: "transform 0.2s ease",
                 fontFamily: theme.fonts.display,
                 whiteSpace: "nowrap",
                 flexShrink: 0,
